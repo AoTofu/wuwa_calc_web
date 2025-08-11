@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鳴潮 ダメージ計算機 (Wuthering Waves Damage Calculator)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- 左側のサイドバー -->
+        <nav class="sidebar">
+            <div class="sidebar-top">
+                <h2>メニュー</h2>
+                <div class="nav-buttons">
+                    <button id="btn-char_setup" class="nav-button">⚙️ キャラクター準備</button>
+                    <button id="btn-rotation_editor" class="nav-button">➡️ ローテーション入力</button>
+                    <button id="btn-output_view" class="nav-button">📊 計算結果</button>
+                    <button id="btn-data_editor" class="nav-button">💾 データ管理</button>
+                </div>
+            </div>
+            <div class="sidebar-bottom">
+                <div class="username-container">
+                    <label for="username">ユーザー名:</label>
+                    <input type="text" id="username" name="username">
+                </div>
+                <button id="btn-exit" class="exit-button">アプリを終了</button>
+            </div>
+        </nav>
+
+        <!-- 右側のメインコンテンツ -->
+        <main class="main-content">
+            <div id="data-folder-controls">
+                <button id="select-data-folder-btn">📁 データフォルダを選択</button>
+                <span id="data-folder-status">データフォルダが選択されていません</span>
+            </div>
+            <div id="frame-char_setup" class="content-frame">
+                <div class="top-bar">
+                    <h1 class="page-title">キャラクター準備</h1>
+                    <div class="top-buttons">
+                        <button class="action-button">画像からシナリオ作成</button>
+                        <button class="action-button">シナリオ読込</button>
+                        <button class="action-button">シナリオ保存</button>
+                    </div>
+                </div>
+                <div class="team-container">
+                    <!-- キャラクターパネルはJavaScriptで3つ分生成されます -->
+                </div>
+                <div class="sub-panel" id="bottom-controls">
+                    <div class="enemy-settings">
+                        <label>敵レベル: <input type="text" class="small-entry" value="90"></label>
+                        <label>物理耐性: <input type="text" class="small-entry" value="10"></label>
+                        <label>焦熱耐性: <input type="text" class="small-entry" value="10"></label>
+                        <label>気動耐性: <input type="text" class="small-entry" value="10"></label>
+                        <label>凝縮耐性: <input type="text" class="small-entry" value="10"></label>
+                        <label>電導耐性: <input type="text" class="small-entry" value="10"></label>
+                        <label>消滅耐性: <input type="text" class="small-entry" value="10"></label>
+                        <label>回折耐性: <input type="text" class="small-entry" value="10"></label>
+                    </div>
+                    <div class="effects-settings">
+                        <label class="bold-label">ステージ効果: <select id="stage-effects"></select></label>
+                        <div class="abnormal-effects">
+                            <label class="bold-label">利用可能な異常効果:</label>
+                            <!-- チェックボックスはJSで生成 -->
+                        </div>
+                    </div>
+                </div>
+                <button id="proceed-button" class="proceed-button">ローテーション入力へ進む</button>
+            </div>
+
+            <!-- 他のフレーム（ローテーション入力、計算結果、データ管理） -->
+            <div id="frame-rotation_editor" class="content-frame">
+                <div class="rotation-editor-layout">
+                    <!-- 左パネル: スキルセレクター -->
+                    <div id="skill-selector-panel" class="skill-selector">
+                        <!-- キャラクターごとのスキル列がJSでここに生成されます -->
+                    </div>
+            
+                    <!-- 右パネル: ローテーションリスト -->
+                    <div id="rotation-editor-panel" class="rotation-editor">
+                        <h2 class="panel-title">ローテーション編集</h2>
+                        <div class="tab-buttons">
+                            <button id="tab-btn-initial" class="tab-button active">初動ローテーション</button>
+                            <button id="tab-btn-loop" class="tab-button">ループローテーション</button>
+                        </div>
+                        <div id="initial-rotation-list" class="rotation-list-container visible">
+                            <!-- 初動ローテーションのアクションがJSでここに生成されます -->
+                        </div>
+                        <div id="loop-rotation-list" class="rotation-list-container">
+                            <!-- ループローテーションのアクションがJSでここに生成されます -->
+                        </div>
+                        <button class="proceed-button" id="run-calculation-btn">計算実行</button>
+                    </div>
+                </div>
+            </div>
+            <div id="frame-output_view" class="content-frame">
+                <div class="top-bar">
+                    <h1 class="page-title">計算結果</h1>
+                    <div class="top-buttons">
+                        <button class="action-button" id="export-png-btn">画像としてエクスポート</button>
+                    </div>
+                </div>
+                <div class="tab-buttons" id="output-tabs">
+                    <button class="tab-button active" data-tab="summary">サマリー</button>
+                    <button class="tab-button" data-tab="graph">グラフ</button>
+                    <button class="tab-button" data-tab="details">詳細ログ</button>
+                </div>
+                <div class="tab-content-container">
+                    <!-- サマリータブ -->
+                    <div id="tab-content-summary" class="tab-content visible">
+                        <!-- 結果のサマリーがここに表示されます -->
+                    </div>
+                    <!-- グラフタブ -->
+                    <div id="tab-content-graph" class="tab-content">
+                        <div id="graph-placeholder" class="placeholder-text">計算を実行するとグラフが表示されます。</div>
+                        <!-- Matplotlibで生成されたグラフがここに挿入されます -->
+                    </div>
+                    <!-- 詳細ログタブ -->
+                    <div id="tab-content-details" class="tab-content">
+                        <!-- 詳細なダメージログがここに表示されます -->
+                    </div>
+                </div>
+            </div>
+            <div id="frame-data_editor" class="content-frame">
+                <h1 class="page-title">データ管理</h1>
+            </div>
+        </main>
+    </div>
+
+    <!-- ▼▼▼ ここに検索可能ポップアップ（モーダル）のHTMLを統合 ▼▼▼ -->
+    <div id="searchable-popup-overlay" class="modal-overlay">
+        <div class="modal-content">
+            <h2 id="popup-title">タイトル</h2>
+            <input type="text" id="popup-search" placeholder="検索...">
+            <div id="popup-list" class="scrollable-list">
+                <!-- 選択肢はJavaScriptでここに挿入されます -->
+            </div>
+            <button id="popup-close-btn" class="popup-close-button">閉じる</button>
+        </div>
+    </div>
+    <!-- ▲▲▲ ここまで ▲▲▲ -->
+
+    <!-- ▼▼▼ ビルド保存用モーダルを追加 ▼▼▼ -->
+    <div id="save-build-overlay" class="modal-overlay">
+        <div class="modal-content">
+            <h2 id="save-build-title">ビルドを保存</h2>
+            <p id="save-build-prompt">この装備構成のビルド名を入力してください:</p>
+            <input type="text" id="save-build-input" placeholder="ビルド名...">
+            <div class="modal-buttons">
+                <button id="save-build-confirm-btn" class="modal-button-primary">保存</button>
+                <button id="save-build-cancel-btn" class="modal-button-secondary">キャンセル</button>
+            </div>
+        </div>
+    </div>
+    <!-- ▲▲▲ ここまで ▲▲▲ -->
+
+    <!-- ▼▼▼ 確認ダイアログ用モーダルを追加 ▼▼▼ -->
+    <div id="confirm-overlay" class="modal-overlay">
+        <div class="modal-content">
+            <h2 id="confirm-title">確認</h2>
+            <p id="confirm-text">この操作を続けてもよろしいですか？</p>
+            <div class="modal-buttons">
+                <button id="confirm-ok-btn" class="modal-button-primary">OK</button>
+                <button id="confirm-cancel-btn" class="modal-button-secondary">キャンセル</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ▼▼▼ 通知ダイアログ用モーダルを追加 ▼▼▼ -->
+    <div id="alert-overlay" class="modal-overlay">
+        <div class="modal-content">
+            <h2 id="alert-title">情報</h2>
+            <p id="alert-text">処理が完了しました。</p>
+            <div class="modal-buttons">
+                <button id="alert-ok-btn" class="modal-button-primary">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pyodide本体と、アプリケーションのスクリプトを読み込む -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.25.1/full/pyodide.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

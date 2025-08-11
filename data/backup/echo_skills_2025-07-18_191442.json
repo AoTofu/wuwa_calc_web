@@ -1,0 +1,226 @@
+{
+    "無冠者": {
+        "name": "無冠者",
+        "image_file": "無冠者.webp",
+        "buffs": {
+            "召喚バフ": {
+                "description": "自身のダメージ+12%、15秒持続",
+                "trigger": "音骸スキル発動時",
+                "effects": [
+                    {
+                        "type": "単純加算",
+                        "stat_to_buff": "all_damage_up",
+                        "value": 12
+                    }
+                ]
+            }
+        },
+        "damage_effects": [
+            {
+                "name": "無冠者・召喚",
+                "multiplier": 450.0,
+                "attribute": "atk",
+                "activation_types": [
+                    "音骸スキル"
+                ],
+                "damage_types": [
+                    "音骸スキル"
+                ],
+                "concerto_energy": 10
+            }
+        ]
+    },
+    "角": {
+        "name": "角",
+        "image_file": "角.webp",
+        "buffs": {},
+        "skills": []
+    },
+    "カピタネウス": {
+        "name": "カピタネウス",
+        "image_file": "カピタネウス.webp",
+        "buffs": {},
+        "skills": [],
+        "category": "コスト3"
+    },
+    "クラストクス": {
+        "name": "クラストクス",
+        "image_file": "クラストクス.webp",
+        "buffs": {},
+        "skills": [],
+        "category": "コスト3"
+    },
+    "トゲバラタケ": {
+        "name": "トゲバラタケ",
+        "image_file": "トゲバラタケ.webp",
+        "buffs": {},
+        "skills": [],
+        "category": "コスト3"
+    },
+    "ナイトメア哀切の凶鳥": {
+        "name": "ナイトメア哀切の凶鳥",
+        "image_file": "ナイトメア哀切の凶鳥.webp",
+        "buffs": {},
+        "skills": [],
+        "category": "コスト4"
+    },
+    "ナイトメアケルピー": {
+        "name": "ナイトメアケルピー",
+        "image_file": "ナイトメアケルピー.webp",
+        "buffs": {},
+        "skills": [],
+        "category": "コスト4"
+    },
+    "ナイトメア雲閃のウロコ": {
+        "name": "ナイトメア雲閃のウロコ",
+        "image_file": "ナイトメア雲閃のウロコ.webp",
+        "buffs": {},
+        "skills": [],
+        "category": "コスト4"
+    },
+    "ナイトメア輝き蛍の軍勢": {
+        "name": "ナイトメア輝き蛍の軍勢",
+        "image_file": "ナイトメア輝き蛍の軍勢.webp",
+        "buffs": {},
+        "skills": [],
+        "category": "コスト4"
+    },
+    "ナイトメア飛廉の大猿": {
+        "name": "ナイトメア飛廉の大猿",
+        "image_file": "ナイトメア飛廉の大猿.webp",
+        "buffs": {},
+        "skills": [
+            {
+                "name": "ナイトメア大猿",
+                "multiplier": 273.61,
+                "attribute": "atk",
+                "concerto_energy": 0.0,
+                "skill_category": "その他",
+                "activation_types": [
+                    "音骸スキル"
+                ],
+                "damage_types": [
+                    "共鳴スキル",
+                    "気動ダメージ"
+                ]
+            }
+        ]
+    },
+    "ナイトメア無冠者": {
+        "name": "ナイトメア無冠者",
+        "image_file": "ナイトメア無冠者.webp",
+        "buffs": {},
+        "skills": [],
+        "category": "コスト4"
+    },
+    "ナイトメア無情のサギ": {
+        "name": "ナイトメア無情のサギ",
+        "image_file": "ナイトメア無情のサギ.webp",
+        "buffs": {},
+        "skills": [],
+        "category": "コスト4"
+    },
+    "フェイタルエラー": {
+        "name": "フェイタルエラー",
+        "image_file": "フェイタルエラー.webp",
+        "buffs": {},
+        "skills": []
+    },
+    "ヘカテー": {
+        "name": "ヘカテー",
+        "image_file": "ヘカテー.webp",
+        "buffs": {},
+        "skills": []
+    },
+    "ローレライ": {
+        "name": "ローレライ",
+        "image_file": "ローレライ.webp",
+        "buffs": {},
+        "skills": []
+    },
+    "哀切の凶鳥": {
+        "name": "哀切の凶鳥",
+        "image_file": "哀切の凶鳥.webp",
+        "buffs": {},
+        "skills": []
+    },
+    "雲閃のウロコ": {
+        "name": "雲閃のウロコ",
+        "image_file": "雲閃のウロコ.webp",
+        "buffs": {},
+        "skills": []
+    },
+    "機械アボミネーション": {
+        "name": "機械アボミネーション",
+        "image_file": "機械アボミネーション.webp",
+        "buffs": {},
+        "skills": []
+    },
+    "輝き蛍の軍勢": {
+        "name": "輝き蛍の軍勢",
+        "image_file": "輝き蛍の軍勢.webp",
+        "buffs": {},
+        "skills": []
+    },
+    "響き渡る共鳴フルールドリス": {
+        "name": "響き渡る共鳴フルールドリス",
+        "image_file": "響き渡る共鳴フルールドリス.webp",
+        "buffs": {},
+        "skills": []
+    },
+    "嘆きのドレイク": {
+        "name": "嘆きのドレイク",
+        "image_file": "嘆きのドレイク.webp",
+        "buffs": {},
+        "skills": []
+    },
+    "飛廉の大猿": {
+        "name": "飛廉の大猿",
+        "image_file": "飛廉の大猿.webp",
+        "buffs": {},
+        "skills": []
+    },
+    "無情のサギ": {
+        "name": "無情のサギ",
+        "image_file": "無情のサギ.webp",
+        "buffs": {},
+        "skills": []
+    },
+    "無妄者": {
+        "name": "無妄者",
+        "image_file": "無妄者.webp",
+        "buffs": {},
+        "skills": []
+    },
+    "鳴鐘の亀": {
+        "name": "鳴鐘の亀",
+        "image_file": "鳴鐘の亀.webp",
+        "buffs": {},
+        "skills": []
+    },
+    "誉れのライオネス": {
+        "name": "誉れのライオネス",
+        "image_file": "誉れのライオネス.webp",
+        "buffs": {},
+        "skills": []
+    },
+    "雷刹のウロコ": {
+        "name": "雷刹のウロコ",
+        "image_file": "雷刹のウロコ.webp",
+        "buffs": {},
+        "skills": []
+    },
+    "燎原の炎騎": {
+        "name": "燎原の炎騎",
+        "image_file": "燎原の炎騎.webp",
+        "buffs": {},
+        "skills": []
+    },
+    "ナイトメア雷刹のウロコ": {
+        "name": "ナイトメア雷刹のウロコ",
+        "image_file": "ナイトメア雷刹のウロコ.webp",
+        "buffs": {},
+        "skills": [],
+        "category": "コスト4"
+    }
+}

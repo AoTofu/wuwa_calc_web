@@ -1,0 +1,1216 @@
+{
+    "忌炎_s": {
+        "character_name": "忌炎",
+        "weapon_name": "蒼鱗連峰",
+        "constellation": 0,
+        "weapon_rank": 1,
+        "harmony1_name": "谷を突き抜ける長風",
+        "harmony2_name": "谷を突き抜ける長風",
+        "echo_list": [
+            {
+                "name": "",
+                "cost": 4,
+                "main_stat": {
+                    "name": "クリティカルダメージ",
+                    "value": 44,
+                    "key": "crit_damage"
+                },
+                "sub_stats": [
+                    {
+                        "name": "クリティカル率",
+                        "value": 8.1,
+                        "key": "crit_rate"
+                    },
+                    {
+                        "name": "クリティカルダメージ",
+                        "value": 16.2,
+                        "key": "crit_damage"
+                    },
+                    {
+                        "name": "攻撃力%",
+                        "value": 8.6,
+                        "key": "atk_percent"
+                    },
+                    {
+                        "name": "HP%",
+                        "value": 8.6,
+                        "key": "hp_percent"
+                    },
+                    {
+                        "name": "防御力%",
+                        "value": 10.9,
+                        "key": "def_percent"
+                    }
+                ]
+            },
+            {
+                "name": "",
+                "cost": 3,
+                "main_stat": null,
+                "sub_stats": [
+                    {
+                        "name": "クリティカル率",
+                        "value": 8.1,
+                        "key": "crit_rate"
+                    },
+                    {
+                        "name": "クリティカルダメージ",
+                        "value": 16.2,
+                        "key": "crit_damage"
+                    },
+                    {
+                        "name": "共鳴効率",
+                        "value": 9.2,
+                        "key": "resonance_efficiency"
+                    },
+                    {
+                        "name": "HP%",
+                        "value": 8.6,
+                        "key": "hp_percent"
+                    },
+                    {
+                        "name": "防御力%",
+                        "value": 10.9,
+                        "key": "def_percent"
+                    }
+                ]
+            },
+            {
+                "name": "",
+                "cost": 3,
+                "main_stat": null,
+                "sub_stats": [
+                    {
+                        "name": "クリティカル率",
+                        "value": 8.1,
+                        "key": "crit_rate"
+                    },
+                    {
+                        "name": "クリティカルダメージ",
+                        "value": 16.2,
+                        "key": "crit_damage"
+                    },
+                    {
+                        "name": "共鳴効率",
+                        "value": 9.2,
+                        "key": "resonance_efficiency"
+                    },
+                    {
+                        "name": "HP%",
+                        "value": 8.6,
+                        "key": "hp_percent"
+                    },
+                    {
+                        "name": "防御力%",
+                        "value": 10.9,
+                        "key": "def_percent"
+                    }
+                ]
+            },
+            {
+                "name": "",
+                "cost": 1,
+                "main_stat": null,
+                "sub_stats": [
+                    {
+                        "name": "クリティカル率",
+                        "value": 8.1,
+                        "key": "crit_rate"
+                    },
+                    {
+                        "name": "クリティカルダメージ",
+                        "value": 16.2,
+                        "key": "crit_damage"
+                    },
+                    {
+                        "name": "攻撃力%",
+                        "value": 8.6,
+                        "key": "atk_percent"
+                    },
+                    {
+                        "name": "HP%",
+                        "value": 8.6,
+                        "key": "hp_percent"
+                    },
+                    {
+                        "name": "防御力%",
+                        "value": 10.9,
+                        "key": "def_percent"
+                    }
+                ]
+            },
+            {
+                "name": "",
+                "cost": 1,
+                "main_stat": null,
+                "sub_stats": [
+                    {
+                        "name": "クリティカル率",
+                        "value": 8.1,
+                        "key": "crit_rate"
+                    },
+                    {
+                        "name": "クリティカルダメージ",
+                        "value": 16.2,
+                        "key": "crit_damage"
+                    },
+                    {
+                        "name": "攻撃力%",
+                        "value": 8.6,
+                        "key": "atk_percent"
+                    },
+                    {
+                        "name": "HP%",
+                        "value": 8.6,
+                        "key": "hp_percent"
+                    },
+                    {
+                        "name": "防御力%",
+                        "value": 10.9,
+                        "key": "def_percent"
+                    }
+                ]
+            }
+        ],
+        "echo_skill_name": "ナイトメア飛廉の大猿",
+        "is_default": false
+    },
+    "モルトフィー_s": {
+        "character_name": "モルトフィー",
+        "weapon_name": "燃え尽きぬ焔",
+        "constellation": 0,
+        "weapon_rank": 1,
+        "harmony1_name": "月を窺う軽雲",
+        "harmony2_name": "月を窺う軽雲",
+        "echo_list": [
+            {
+                "name": "",
+                "cost": 4,
+                "main_stat": {
+                    "name": "クリティカルダメージ",
+                    "value": 44,
+                    "key": "crit_damage"
+                },
+                "sub_stats": [
+                    {
+                        "name": "クリティカル率",
+                        "value": 8.1,
+                        "key": "crit_rate"
+                    },
+                    {
+                        "name": "クリティカルダメージ",
+                        "value": 16.2,
+                        "key": "crit_damage"
+                    },
+                    {
+                        "name": "攻撃力%",
+                        "value": 8.6,
+                        "key": "atk_percent"
+                    },
+                    {
+                        "name": "HP%",
+                        "value": 8.6,
+                        "key": "hp_percent"
+                    },
+                    {
+                        "name": "防御力%",
+                        "value": 10.9,
+                        "key": "def_percent"
+                    }
+                ]
+            },
+            {
+                "name": "",
+                "cost": 3,
+                "main_stat": {
+                    "name": "焦熱ダメージアップ",
+                    "value": 30,
+                    "key": "fusion_dmg_up"
+                },
+                "sub_stats": [
+                    {
+                        "name": "クリティカル率",
+                        "value": 8.1,
+                        "key": "crit_rate"
+                    },
+                    {
+                        "name": "クリティカルダメージ",
+                        "value": 16.2,
+                        "key": "crit_damage"
+                    },
+                    {
+                        "name": "攻撃力%",
+                        "value": 8.6,
+                        "key": "atk_percent"
+                    },
+                    {
+                        "name": "HP%",
+                        "value": 8.6,
+                        "key": "hp_percent"
+                    },
+                    {
+                        "name": "共鳴効率",
+                        "value": 9.2,
+                        "key": "resonance_efficiency"
+                    }
+                ]
+            },
+            {
+                "name": "",
+                "cost": 3,
+                "main_stat": {
+                    "name": "焦熱ダメージアップ",
+                    "value": 30,
+                    "key": "fusion_dmg_up"
+                },
+                "sub_stats": [
+                    {
+                        "name": "クリティカル率",
+                        "value": 8.1,
+                        "key": "crit_rate"
+                    },
+                    {
+                        "name": "クリティカルダメージ",
+                        "value": 16.2,
+                        "key": "crit_damage"
+                    },
+                    {
+                        "name": "攻撃力%",
+                        "value": 8.6,
+                        "key": "atk_percent"
+                    },
+                    {
+                        "name": "HP%",
+                        "value": 8.6,
+                        "key": "hp_percent"
+                    },
+                    {
+                        "name": "共鳴効率",
+                        "value": 9.2,
+                        "key": "resonance_efficiency"
+                    }
+                ]
+            },
+            {
+                "name": "",
+                "cost": 1,
+                "main_stat": {
+                    "name": "HP(数値)",
+                    "value": 2280,
+                    "key": "hp_flat"
+                },
+                "sub_stats": [
+                    {
+                        "name": "クリティカル率",
+                        "value": 8.1,
+                        "key": "crit_rate"
+                    },
+                    {
+                        "name": "クリティカルダメージ",
+                        "value": 16.2,
+                        "key": "crit_damage"
+                    },
+                    {
+                        "name": "攻撃力%",
+                        "value": 8.6,
+                        "key": "atk_percent"
+                    },
+                    {
+                        "name": "HP%",
+                        "value": 8.6,
+                        "key": "hp_percent"
+                    },
+                    {
+                        "name": "防御力%",
+                        "value": 10.9,
+                        "key": "def_percent"
+                    }
+                ]
+            },
+            {
+                "name": "",
+                "cost": 1,
+                "main_stat": {
+                    "name": "HP(数値)",
+                    "value": 2280,
+                    "key": "hp_flat"
+                },
+                "sub_stats": [
+                    {
+                        "name": "クリティカル率",
+                        "value": 8.1,
+                        "key": "crit_rate"
+                    },
+                    {
+                        "name": "クリティカルダメージ",
+                        "value": 16.2,
+                        "key": "crit_damage"
+                    },
+                    {
+                        "name": "攻撃力%",
+                        "value": 8.6,
+                        "key": "atk_percent"
+                    },
+                    {
+                        "name": "HP%",
+                        "value": 8.6,
+                        "key": "hp_percent"
+                    },
+                    {
+                        "name": "防御力%",
+                        "value": 10.9,
+                        "key": "def_percent"
+                    }
+                ]
+            }
+        ],
+        "echo_skill_name": "無情のサギ",
+        "is_default": false
+    },
+    "ヴェリーナ_s": {
+        "character_name": "ヴェリーナ",
+        "weapon_name": "奇妙バリエーション",
+        "constellation": 0,
+        "weapon_rank": 1,
+        "harmony1_name": "喧騒に隠す回光",
+        "harmony2_name": "喧騒に隠す回光",
+        "echo_list": [
+            {
+                "name": "",
+                "cost": 4,
+                "main_stat": {
+                    "name": "クリティカルダメージ",
+                    "value": 44,
+                    "key": "crit_damage"
+                },
+                "sub_stats": [
+                    {
+                        "name": "クリティカル率",
+                        "value": 8.1,
+                        "key": "crit_rate"
+                    },
+                    {
+                        "name": "クリティカルダメージ",
+                        "value": 16.2,
+                        "key": "crit_damage"
+                    },
+                    {
+                        "name": "攻撃力%",
+                        "value": 8.6,
+                        "key": "atk_percent"
+                    },
+                    {
+                        "name": "HP%",
+                        "value": 8.6,
+                        "key": "hp_percent"
+                    },
+                    {
+                        "name": "防御力%",
+                        "value": 10.9,
+                        "key": "def_percent"
+                    }
+                ]
+            },
+            {
+                "name": "",
+                "cost": 3,
+                "main_stat": {
+                    "name": "回折ダメージアップ",
+                    "value": 30,
+                    "key": "spectro_dmg_up"
+                },
+                "sub_stats": [
+                    {
+                        "name": "クリティカル率",
+                        "value": 8.1,
+                        "key": "crit_rate"
+                    },
+                    {
+                        "name": "クリティカルダメージ",
+                        "value": 16.2,
+                        "key": "crit_damage"
+                    },
+                    {
+                        "name": "攻撃力%",
+                        "value": 8.6,
+                        "key": "atk_percent"
+                    },
+                    {
+                        "name": "HP%",
+                        "value": 8.6,
+                        "key": "hp_percent"
+                    },
+                    {
+                        "name": "共鳴効率",
+                        "value": 9.2,
+                        "key": "resonance_efficiency"
+                    }
+                ]
+            },
+            {
+                "name": "",
+                "cost": 3,
+                "main_stat": {
+                    "name": "回折ダメージアップ",
+                    "value": 30,
+                    "key": "spectro_dmg_up"
+                },
+                "sub_stats": [
+                    {
+                        "name": "クリティカル率",
+                        "value": 8.1,
+                        "key": "crit_rate"
+                    },
+                    {
+                        "name": "クリティカルダメージ",
+                        "value": 16.2,
+                        "key": "crit_damage"
+                    },
+                    {
+                        "name": "攻撃力%",
+                        "value": 8.6,
+                        "key": "atk_percent"
+                    },
+                    {
+                        "name": "HP%",
+                        "value": 8.6,
+                        "key": "hp_percent"
+                    },
+                    {
+                        "name": "共鳴効率",
+                        "value": 9.2,
+                        "key": "resonance_efficiency"
+                    }
+                ]
+            },
+            {
+                "name": "",
+                "cost": 1,
+                "main_stat": {
+                    "name": "HP(数値)",
+                    "value": 2280,
+                    "key": "hp_flat"
+                },
+                "sub_stats": [
+                    {
+                        "name": "クリティカル率",
+                        "value": 8.1,
+                        "key": "crit_rate"
+                    },
+                    {
+                        "name": "クリティカルダメージ",
+                        "value": 16.2,
+                        "key": "crit_damage"
+                    },
+                    {
+                        "name": "攻撃力%",
+                        "value": 8.6,
+                        "key": "atk_percent"
+                    },
+                    {
+                        "name": "HP%",
+                        "value": 8.6,
+                        "key": "hp_percent"
+                    },
+                    {
+                        "name": "防御力%",
+                        "value": 10.9,
+                        "key": "def_percent"
+                    }
+                ]
+            },
+            {
+                "name": "",
+                "cost": 1,
+                "main_stat": {
+                    "name": "HP(数値)",
+                    "value": 2280,
+                    "key": "hp_flat"
+                },
+                "sub_stats": [
+                    {
+                        "name": "クリティカル率",
+                        "value": 8.1,
+                        "key": "crit_rate"
+                    },
+                    {
+                        "name": "クリティカルダメージ",
+                        "value": 16.2,
+                        "key": "crit_damage"
+                    },
+                    {
+                        "name": "攻撃力%",
+                        "value": 8.6,
+                        "key": "atk_percent"
+                    },
+                    {
+                        "name": "HP%",
+                        "value": 8.6,
+                        "key": "hp_percent"
+                    },
+                    {
+                        "name": "防御力%",
+                        "value": 10.9,
+                        "key": "def_percent"
+                    }
+                ]
+            }
+        ],
+        "echo_skill_name": "フェイタルエラー",
+        "is_default": false
+    },
+    "tst2": {
+        "character_name": "忌炎",
+        "weapon_name": "蒼鱗連峰",
+        "echo_list": [
+            {
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            },
+            {
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            },
+            {
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            },
+            {
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            },
+            {
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            }
+        ]
+    },
+    "test3": {
+        "character_name": "忌炎",
+        "weapon_name": "蒼鱗連峰",
+        "echo_list": [
+            {
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            },
+            {
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            },
+            {
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            },
+            {
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            },
+            {
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            }
+        ]
+    },
+    "helo2": {
+        "character_name": "忌炎",
+        "weapon_name": "蒼鱗連峰",
+        "echo_list": [
+            {
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            },
+            {
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            },
+            {
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            },
+            {
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            },
+            {
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            }
+        ]
+    },
+    "hello3": {
+        "character_name": "忌炎",
+        "weapon_name": "蒼鱗連峰",
+        "echo_list": [
+            {
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            },
+            {
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            },
+            {
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            },
+            {
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            },
+            {
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            }
+        ]
+    },
+    "っっd": {
+        "character_name": "ヴェリーナ",
+        "weapon_name": "コアが溶融する降着円盤",
+        "echo_list": [
+            {
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            },
+            {
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            },
+            {
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            },
+            {
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            },
+            {
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            }
+        ]
+    },
+    "test5": {
+        "character_name": "ヴェリーナ",
+        "weapon_name": "武器を選択",
+        "echo_list": [
+            {
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            },
+            {
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            },
+            {
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            },
+            {
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            },
+            {
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            }
+        ]
+    },
+    "ヴェリ": {
+        "character_name": "ヴェリーナ",
+        "weapon_name": "英子の湖岸",
+        "constellation": 3,
+        "weapon_rank": 4,
+        "harmony1_name": "山を轟かせる崩火",
+        "harmony2_name": "二度と輝かない沈日",
+        "echo_list": [
+            {
+                "name": "",
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            },
+            {
+                "name": "",
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            },
+            {
+                "name": "",
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            },
+            {
+                "name": "",
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            },
+            {
+                "name": "",
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            }
+        ],
+        "echo_skill_name": "トゲバラタケ"
+    },
+    "veri3 ": {
+        "character_name": "ヴェリーナ",
+        "weapon_name": "武器を選択",
+        "constellation": 0,
+        "weapon_rank": 1,
+        "harmony1_name": "闇を取り払う浮星",
+        "harmony2_name": "闇を取り払う浮星",
+        "echo_list": [
+            {
+                "name": "",
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": [
+                    {
+                        "name": "クリティカルダメージ",
+                        "value": 12.6,
+                        "key": "crit_damage"
+                    },
+                    {
+                        "name": "通常攻撃ダメージアップ",
+                        "value": 6.4,
+                        "key": "normal_attack_dmg_up"
+                    },
+                    {
+                        "name": "攻撃力%",
+                        "value": 6.4,
+                        "key": "atk_percent"
+                    },
+                    {
+                        "name": "クリティカル率",
+                        "value": 6.3,
+                        "key": "crit_rate"
+                    },
+                    {
+                        "name": "HP(数値)",
+                        "value": 320,
+                        "key": "hp_flat"
+                    }
+                ]
+            },
+            {
+                "name": "",
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            },
+            {
+                "name": "",
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            },
+            {
+                "name": "",
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            },
+            {
+                "name": "",
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            }
+        ],
+        "echo_skill_name": "ナイトメア無冠者"
+    },
+    "anko1": {
+        "character_name": "アンコ",
+        "weapon_name": "虚飾のワルツ",
+        "constellation": 3,
+        "weapon_rank": 5,
+        "harmony1_name": "山を轟かせる崩火",
+        "harmony2_name": "闇を取り払う浮星",
+        "echo_list": [
+            {
+                "name": "",
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": [
+                    {
+                        "name": "クリティカルダメージ",
+                        "value": 12.6,
+                        "key": "crit_damage"
+                    },
+                    {
+                        "name": "攻撃力(数値)",
+                        "value": 30,
+                        "key": "atk_flat"
+                    },
+                    {
+                        "name": "クリティカルダメージ",
+                        "value": 12.6,
+                        "key": "crit_damage"
+                    },
+                    {
+                        "name": "HP(数値)",
+                        "value": 320,
+                        "key": "hp_flat"
+                    },
+                    {
+                        "name": "防御力(数値)",
+                        "value": 40,
+                        "key": "def_flat"
+                    }
+                ]
+            },
+            {
+                "name": "",
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            },
+            {
+                "name": "",
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            },
+            {
+                "name": "",
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            },
+            {
+                "name": "",
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            }
+        ],
+        "echo_skill_name": "ナイトメア哀切の凶鳥"
+    },
+    "anko3": {
+        "character_name": "アンコ",
+        "weapon_name": "虚飾のワルツ",
+        "constellation": 3,
+        "weapon_rank": 5,
+        "harmony1_name": "山を轟かせる崩火",
+        "harmony2_name": "闇を取り払う浮星",
+        "echo_list": [
+            {
+                "name": "",
+                "cost": 4,
+                "main_stat": {
+                    "name": "治療効果アップ",
+                    "value": 26.4,
+                    "key": "heal_bonus"
+                },
+                "sub_stats": [
+                    {
+                        "name": "クリティカルダメージ",
+                        "value": 12.6,
+                        "key": "crit_damage"
+                    },
+                    {
+                        "name": "攻撃力(数値)",
+                        "value": 30,
+                        "key": "atk_flat"
+                    },
+                    {
+                        "name": "クリティカルダメージ",
+                        "value": 12.6,
+                        "key": "crit_damage"
+                    },
+                    {
+                        "name": "HP(数値)",
+                        "value": 320,
+                        "key": "hp_flat"
+                    },
+                    {
+                        "name": "防御力(数値)",
+                        "value": 40,
+                        "key": "def_flat"
+                    }
+                ]
+            },
+            {
+                "name": "",
+                "cost": 4,
+                "main_stat": {
+                    "name": "クリティカル率",
+                    "value": 22,
+                    "key": "crit_rate"
+                },
+                "sub_stats": [
+                    {
+                        "name": "クリティカル率",
+                        "value": 6.3,
+                        "key": "crit_rate"
+                    },
+                    {
+                        "name": "クリティカルダメージ",
+                        "value": 12.6,
+                        "key": "crit_damage"
+                    },
+                    {
+                        "name": "通常攻撃ダメージアップ",
+                        "value": 6.4,
+                        "key": "normal_attack_dmg_up"
+                    },
+                    {
+                        "name": "攻撃力(数値)",
+                        "value": 30,
+                        "key": "atk_flat"
+                    },
+                    {
+                        "name": "通常攻撃ダメージアップ",
+                        "value": 6.4,
+                        "key": "normal_attack_dmg_up"
+                    }
+                ]
+            },
+            {
+                "name": "",
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            },
+            {
+                "name": "",
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            },
+            {
+                "name": "",
+                "cost": 4,
+                "main_stat": {
+                    "name": "HP%",
+                    "value": 33,
+                    "key": "hp_percent"
+                },
+                "sub_stats": []
+            }
+        ],
+        "echo_skill_name": "ナイトメア哀切の凶鳥"
+    }
+}

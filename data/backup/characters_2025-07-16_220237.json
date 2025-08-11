@@ -1,0 +1,1759 @@
+{
+    "忌炎": {
+        "name": "忌炎",
+        "base_hp": 10487.0,
+        "base_atk": 437.0,
+        "base_def": 1185.0,
+        "innate_stats": [
+            {
+                "key": "crit_rate",
+                "value": 8.0
+            },
+            {
+                "key": "atk_percent",
+                "value": 12.0
+            }
+        ],
+        "skills": [
+            {
+                "name": "通常攻撃1段",
+                "multiplier": 73.16,
+                "attribute": "atk",
+                "concerto_energy": 2.0,
+                "skill_category": "基本攻撃手段",
+                "activation_types": [
+                    "通常攻撃"
+                ],
+                "damage_types": [
+                    "通常攻撃",
+                    "気動ダメージ"
+                ]
+            },
+            {
+                "name": "通常攻撃2段",
+                "multiplier": 43.73,
+                "attribute": "atk",
+                "concerto_energy": 0.0,
+                "skill_category": "基本攻撃手段",
+                "activation_types": [
+                    "通常攻撃"
+                ],
+                "damage_types": [
+                    "通常攻撃",
+                    "気動ダメージ"
+                ]
+            },
+            {
+                "name": "通常攻撃3段目",
+                "multiplier": 181.9,
+                "attribute": "atk",
+                "concerto_energy": 1.0,
+                "skill_category": "基本攻撃手段",
+                "activation_types": [
+                    "通常攻撃"
+                ],
+                "damage_types": [
+                    "通常攻撃",
+                    "気動ダメージ"
+                ]
+            },
+            {
+                "name": "通常攻撃4段目",
+                "multiplier": 132.4,
+                "attribute": "atk",
+                "concerto_energy": 1.0,
+                "skill_category": "基本攻撃手段",
+                "activation_types": [
+                    "通常攻撃"
+                ],
+                "damage_types": [
+                    "通常攻撃",
+                    "気動ダメージ"
+                ]
+            },
+            {
+                "name": "通常攻撃5段目",
+                "multiplier": 472.1,
+                "attribute": "atk",
+                "concerto_energy": 1.0,
+                "skill_category": "基本攻撃手段",
+                "activation_types": [
+                    "通常攻撃"
+                ],
+                "damage_types": [
+                    "通常攻撃",
+                    "気動ダメージ"
+                ]
+            },
+            {
+                "name": "重撃",
+                "multiplier": 133.2,
+                "attribute": "atk",
+                "concerto_energy": 3.0,
+                "skill_category": "基本攻撃手段",
+                "activation_types": [
+                    "重撃"
+                ],
+                "damage_types": [
+                    "重撃",
+                    "気動ダメージ"
+                ]
+            },
+            {
+                "name": "重撃 凌空撃",
+                "multiplier": 105.96,
+                "attribute": "atk",
+                "concerto_energy": 3.0,
+                "skill_category": "基本攻撃手段",
+                "activation_types": [
+                    "重撃"
+                ],
+                "damage_types": [
+                    "重撃",
+                    "気動ダメージ"
+                ]
+            },
+            {
+                "name": "重撃 潜淵斬",
+                "multiplier": 81.71,
+                "attribute": "atk",
+                "concerto_energy": 3.0,
+                "skill_category": "基本攻撃手段",
+                "activation_types": [
+                    "重撃"
+                ],
+                "damage_types": [
+                    "重撃",
+                    "気動ダメージ"
+                ]
+            },
+            {
+                "name": "空中攻撃",
+                "multiplier": 238.57,
+                "attribute": "atk",
+                "concerto_energy": 3.0,
+                "skill_category": "基本攻撃手段",
+                "activation_types": [
+                    "通常攻撃"
+                ],
+                "damage_types": [
+                    "通常攻撃",
+                    "気動ダメージ"
+                ]
+            },
+            {
+                "name": "空中攻撃 派生",
+                "multiplier": 155.66,
+                "attribute": "atk",
+                "concerto_energy": 3.0,
+                "skill_category": "基本攻撃手段",
+                "activation_types": [
+                    "通常攻撃"
+                ],
+                "damage_types": [
+                    "通常攻撃",
+                    "気動ダメージ"
+                ]
+            },
+            {
+                "name": "空中攻撃 不墜",
+                "multiplier": 79.52,
+                "attribute": "atk",
+                "concerto_energy": 3.0,
+                "skill_category": "基本攻撃手段",
+                "activation_types": [
+                    "通常攻撃"
+                ],
+                "damage_types": [
+                    "通常攻撃",
+                    "気動ダメージ"
+                ]
+            },
+            {
+                "name": "回避反撃",
+                "multiplier": 251.7,
+                "attribute": "atk",
+                "concerto_energy": 3.0,
+                "skill_category": "基本攻撃手段",
+                "activation_types": [
+                    "通常攻撃"
+                ],
+                "damage_types": [
+                    "通常攻撃",
+                    "気動ダメージ"
+                ]
+            },
+            {
+                "name": "共鳴スキル",
+                "multiplier": 425.44,
+                "attribute": "atk",
+                "concerto_energy": 16.0,
+                "skill_category": "共鳴スキル",
+                "activation_types": [
+                    "共鳴スキル"
+                ],
+                "damage_types": [
+                    "共鳴スキル",
+                    "気動ダメージ"
+                ]
+            },
+            {
+                "name": "回路-共鳴解放",
+                "multiplier": 714.55,
+                "attribute": "atk",
+                "concerto_energy": 20.0,
+                "skill_category": "共鳴回路",
+                "activation_types": [
+                    "共鳴解放"
+                ],
+                "damage_types": [
+                    "重撃",
+                    "気動ダメージ"
+                ]
+            },
+            {
+                "name": "共鳴解放",
+                "multiplier": 0.0,
+                "attribute": "atk",
+                "concerto_energy": 20.0,
+                "skill_category": "共鳴解放",
+                "activation_types": [
+                    "共鳴解放"
+                ],
+                "damage_types": [
+                    "共鳴解放",
+                    "気動ダメージ"
+                ]
+            },
+            {
+                "name": "破陣の槍1段目",
+                "multiplier": 524.16,
+                "attribute": "atk",
+                "concerto_energy": 10.0,
+                "skill_category": "共鳴解放",
+                "activation_types": [
+                    "通常攻撃"
+                ],
+                "damage_types": [
+                    "重撃",
+                    "気動ダメージ"
+                ]
+            },
+            {
+                "name": "破陣の槍2段目",
+                "multiplier": 482.4,
+                "attribute": "atk",
+                "concerto_energy": 10.0,
+                "skill_category": "共鳴解放",
+                "activation_types": [
+                    "通常攻撃"
+                ],
+                "damage_types": [
+                    "重撃",
+                    "気動ダメージ"
+                ]
+            },
+            {
+                "name": "破陣の槍3段目",
+                "multiplier": 534.08,
+                "attribute": "atk",
+                "concerto_energy": 10.0,
+                "skill_category": "共鳴解放",
+                "activation_types": [
+                    "通常攻撃"
+                ],
+                "damage_types": [
+                    "重撃",
+                    "気動ダメージ"
+                ]
+            },
+            {
+                "name": "変奏スキル",
+                "multiplier": 198.81,
+                "attribute": "atk",
+                "concerto_energy": 10.0,
+                "skill_category": "変奏スキル",
+                "activation_types": [
+                    "変奏スキル"
+                ],
+                "damage_types": [
+                    "変奏スキル",
+                    "気動ダメージ"
+                ]
+            },
+            {
+                "name": "終奏スキル",
+                "multiplier": 313.4,
+                "attribute": "atk",
+                "concerto_energy": 10.0,
+                "skill_category": "終奏スキル",
+                "activation_types": [
+                    "終奏スキル"
+                ],
+                "damage_types": [
+                    "終奏スキル",
+                    "気動ダメージ"
+                ]
+            }
+        ],
+        "buffs": {
+            "固有1": {
+                "description": "固有1",
+                "trigger": [
+                    {
+                        "event": "常時",
+                        "source": "自身発動"
+                    }
+                ],
+                "effects": [
+                    {
+                        "type": "単純加算",
+                        "stat_to_buff": "atk_percent",
+                        "value": 10.0
+                    }
+                ],
+                "target": "自身"
+            },
+            "固有2": {
+                "description": "固有2",
+                "trigger": [
+                    {
+                        "event": "常",
+                        "source": "自身発動"
+                    }
+                ],
+                "effects": [
+                    {
+                        "type": "単純加算",
+                        "stat_to_buff": "crit_damage",
+                        "value": 12.0
+                    }
+                ],
+                "target": "自身"
+            }
+        },
+        "image_file": "忌炎.webp",
+        "weapon_type": "長刃",
+        "attribute": "気動",
+        "constellations": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": ""
+        }
+    },
+    "ヴェリーナ": {
+        "name": "ヴェリーナ",
+        "base_hp": 14237.0,
+        "base_atk": 337.0,
+        "base_def": 1099.0,
+        "innate_stats": [
+            {
+                "key": "heal_bonus",
+                "value": 12.0
+            },
+            {
+                "key": "atk_percent",
+                "value": 12.0
+            }
+        ],
+        "skills": [
+            {
+                "name": "終奏スキル",
+                "multiplier": 0.0,
+                "attribute": "atk",
+                "concerto_energy": 0.0,
+                "skill_category": "終奏スキル",
+                "activation_types": [
+                    "終奏スキル"
+                ],
+                "damage_types": [
+                    "回折ダメージ"
+                ]
+            }
+        ],
+        "buffs": {
+            "終奏スキル:登場キャラのDB15%": {
+                "description": "終奏スキル:登場キャラのDB15%",
+                "effects": [
+                    {
+                        "type": "単純加算",
+                        "stat_to_buff": "generic_dmg_boost",
+                        "value": 15.0
+                    }
+                ],
+                "trigger": [
+                    {
+                        "event": "終奏スキル発動時",
+                        "source": "自身発動"
+                    }
+                ],
+                "target": "チーム全員"
+            }
+        },
+        "image_file": "ヴェリーナ.webp",
+        "weapon_type": "増幅器",
+        "attribute": "回折",
+        "constellations": {
+            "1": {
+                "buffs": {},
+                "skills": []
+            },
+            "2": {
+                "buffs": {},
+                "skills": []
+            },
+            "3": {
+                "buffs": {},
+                "skills": []
+            },
+            "4": {
+                "buffs": {},
+                "skills": []
+            },
+            "5": {
+                "buffs": {},
+                "skills": []
+            },
+            "6": {
+                "buffs": {},
+                "skills": []
+            }
+        }
+    },
+    "モルトフィー": {
+        "name": "モルトフィー",
+        "base_hp": 10025.0,
+        "base_atk": 250.0,
+        "base_def": 1136.0,
+        "innate_stats": [
+            {
+                "key": "atk_percent",
+                "value": 12.0
+            },
+            {
+                "key": "fusion_dmg_up",
+                "value": 12.0
+            }
+        ],
+        "skills": [
+            {
+                "name": "終奏スキル",
+                "multiplier": 0.0,
+                "attribute": "atk",
+                "concerto_energy": 0.0,
+                "skill_category": "終奏スキル",
+                "activation_types": [
+                    "終奏スキル"
+                ],
+                "damage_types": [
+                    "焦熱ダメージ"
+                ]
+            }
+        ],
+        "buffs": {
+            "終奏スキル": {
+                "description": "終奏スキル",
+                "trigger": [
+                    {
+                        "event": "終奏スキル発動時",
+                        "source": "自身発動"
+                    }
+                ],
+                "target": "チーム内キャラクター1人",
+                "effects": [
+                    {
+                        "type": "単純加算",
+                        "stat_to_buff": "heavy_attack_dmg_boost",
+                        "value": 38.0
+                    }
+                ]
+            }
+        },
+        "image_file": "モルトフィー.webp",
+        "weapon_type": "拳銃",
+        "attribute": "焦熱",
+        "constellations": {
+            "1": {
+                "buffs": {},
+                "skills": []
+            },
+            "2": {
+                "buffs": {},
+                "skills": []
+            },
+            "3": {
+                "buffs": {},
+                "skills": []
+            },
+            "4": {
+                "buffs": {},
+                "skills": []
+            },
+            "5": {
+                "buffs": {},
+                "skills": []
+            },
+            "6": {
+                "buffs": {},
+                "skills": []
+            }
+        }
+    },
+    "アンコ": {
+        "name": "アンコ",
+        "base_hp": 0.0,
+        "base_atk": 0.0,
+        "base_def": 0.0,
+        "innate_stats": [],
+        "skills": [],
+        "buffs": {},
+        "image_file": "アンコ.webp",
+        "weapon_type": "増幅器",
+        "attribute": "焦熱",
+        "constellations": {
+            "1": {
+                "buffs": {},
+                "skills": []
+            },
+            "2": {
+                "buffs": {},
+                "skills": []
+            },
+            "3": {
+                "buffs": {},
+                "skills": []
+            },
+            "4": {
+                "buffs": {},
+                "skills": []
+            },
+            "5": {
+                "buffs": {},
+                "skills": []
+            },
+            "6": {
+                "buffs": {},
+                "skills": []
+            }
+        }
+    },
+    "アールト": {
+        "name": "アールト",
+        "base_hp": 0.0,
+        "base_atk": 0.0,
+        "base_def": 0.0,
+        "innate_stats": [],
+        "skills": [],
+        "buffs": {},
+        "image_file": "アールト.webp",
+        "weapon_type": "拳銃",
+        "attribute": "気動",
+        "constellations": {
+            "1": {
+                "buffs": {},
+                "skills": []
+            },
+            "2": {
+                "buffs": {},
+                "skills": []
+            },
+            "3": {
+                "buffs": {},
+                "skills": []
+            },
+            "4": {
+                "buffs": {},
+                "skills": []
+            },
+            "5": {
+                "buffs": {},
+                "skills": []
+            },
+            "6": {
+                "buffs": {},
+                "skills": []
+            }
+        }
+    },
+    "カカロ": {
+        "name": "カカロ",
+        "base_hp": 0.0,
+        "base_atk": 0.0,
+        "base_def": 0.0,
+        "innate_stats": [],
+        "skills": [],
+        "buffs": {},
+        "image_file": "カカロ.webp",
+        "weapon_type": "長刃",
+        "attribute": "電導",
+        "constellations": {
+            "1": {
+                "buffs": {},
+                "skills": []
+            },
+            "2": {
+                "buffs": {},
+                "skills": []
+            },
+            "3": {
+                "buffs": {},
+                "skills": []
+            },
+            "4": {
+                "buffs": {},
+                "skills": []
+            },
+            "5": {
+                "buffs": {},
+                "skills": []
+            },
+            "6": {
+                "buffs": {},
+                "skills": []
+            }
+        }
+    },
+    "カルテジア": {
+        "name": "カルテジア",
+        "base_hp": 0.0,
+        "base_atk": 0.0,
+        "base_def": 0.0,
+        "innate_stats": [],
+        "skills": [],
+        "buffs": {},
+        "image_file": "カルテジア.webp",
+        "weapon_type": "迅刀",
+        "attribute": "気動",
+        "constellations": {
+            "1": {
+                "buffs": {},
+                "skills": []
+            },
+            "2": {
+                "buffs": {},
+                "skills": []
+            },
+            "3": {
+                "buffs": {},
+                "skills": []
+            },
+            "4": {
+                "buffs": {},
+                "skills": []
+            },
+            "5": {
+                "buffs": {},
+                "skills": []
+            },
+            "6": {
+                "buffs": {},
+                "skills": []
+            }
+        }
+    },
+    "カルロッタ": {
+        "name": "カルロッタ",
+        "base_hp": 0.0,
+        "base_atk": 0.0,
+        "base_def": 0.0,
+        "innate_stats": [],
+        "skills": [],
+        "buffs": {},
+        "image_file": "カルロッタ.webp",
+        "weapon_type": "拳銃",
+        "attribute": "凝縮",
+        "constellations": {
+            "1": {
+                "buffs": {},
+                "skills": []
+            },
+            "2": {
+                "buffs": {},
+                "skills": []
+            },
+            "3": {
+                "buffs": {},
+                "skills": []
+            },
+            "4": {
+                "buffs": {},
+                "skills": []
+            },
+            "5": {
+                "buffs": {},
+                "skills": []
+            },
+            "6": {
+                "buffs": {},
+                "skills": []
+            }
+        }
+    },
+    "カンタレラ": {
+        "name": "カンタレラ",
+        "base_hp": 0.0,
+        "base_atk": 0.0,
+        "base_def": 0.0,
+        "innate_stats": [],
+        "skills": [],
+        "buffs": {},
+        "image_file": "カンタレラ.webp",
+        "weapon_type": "増幅器",
+        "attribute": "消滅",
+        "constellations": {
+            "1": {
+                "buffs": {},
+                "skills": []
+            },
+            "2": {
+                "buffs": {},
+                "skills": []
+            },
+            "3": {
+                "buffs": {},
+                "skills": []
+            },
+            "4": {
+                "buffs": {},
+                "skills": []
+            },
+            "5": {
+                "buffs": {},
+                "skills": []
+            },
+            "6": {
+                "buffs": {},
+                "skills": []
+            }
+        }
+    },
+    "ザンニー": {
+        "name": "ザンニー",
+        "base_hp": 0.0,
+        "base_atk": 0.0,
+        "base_def": 0.0,
+        "innate_stats": [],
+        "skills": [],
+        "buffs": {},
+        "image_file": "ザンニー.webp",
+        "weapon_type": "手甲",
+        "attribute": "回折",
+        "constellations": {
+            "1": {
+                "buffs": {},
+                "skills": []
+            },
+            "2": {
+                "buffs": {},
+                "skills": []
+            },
+            "3": {
+                "buffs": {},
+                "skills": []
+            },
+            "4": {
+                "buffs": {},
+                "skills": []
+            },
+            "5": {
+                "buffs": {},
+                "skills": []
+            },
+            "6": {
+                "buffs": {},
+                "skills": []
+            }
+        }
+    },
+    "シャコンヌ": {
+        "name": "シャコンヌ",
+        "base_hp": 0.0,
+        "base_atk": 0.0,
+        "base_def": 0.0,
+        "innate_stats": [],
+        "skills": [],
+        "buffs": {},
+        "image_file": "シャコンヌ.webp",
+        "weapon_type": "拳銃",
+        "attribute": "気動",
+        "constellations": {
+            "1": {
+                "buffs": {},
+                "skills": []
+            },
+            "2": {
+                "buffs": {},
+                "skills": []
+            },
+            "3": {
+                "buffs": {},
+                "skills": []
+            },
+            "4": {
+                "buffs": {},
+                "skills": []
+            },
+            "5": {
+                "buffs": {},
+                "skills": []
+            },
+            "6": {
+                "buffs": {},
+                "skills": []
+            }
+        }
+    },
+    "ショアキーパー": {
+        "name": "ショアキーパー",
+        "base_hp": 0.0,
+        "base_atk": 0.0,
+        "base_def": 0.0,
+        "innate_stats": [],
+        "skills": [],
+        "buffs": {},
+        "image_file": "ショアキーパー.webp",
+        "weapon_type": "増幅器",
+        "attribute": "回折",
+        "constellations": {
+            "1": {
+                "buffs": {},
+                "skills": []
+            },
+            "2": {
+                "buffs": {},
+                "skills": []
+            },
+            "3": {
+                "buffs": {},
+                "skills": []
+            },
+            "4": {
+                "buffs": {},
+                "skills": []
+            },
+            "5": {
+                "buffs": {},
+                "skills": []
+            },
+            "6": {
+                "buffs": {},
+                "skills": []
+            }
+        }
+    },
+    "ツバキ": {
+        "name": "ツバキ",
+        "base_hp": 0.0,
+        "base_atk": 0.0,
+        "base_def": 0.0,
+        "innate_stats": [],
+        "skills": [],
+        "buffs": {},
+        "image_file": "ツバキ.webp",
+        "weapon_type": "迅刀",
+        "attribute": "消滅",
+        "constellations": {
+            "1": {
+                "buffs": {},
+                "skills": []
+            },
+            "2": {
+                "buffs": {},
+                "skills": []
+            },
+            "3": {
+                "buffs": {},
+                "skills": []
+            },
+            "4": {
+                "buffs": {},
+                "skills": []
+            },
+            "5": {
+                "buffs": {},
+                "skills": []
+            },
+            "6": {
+                "buffs": {},
+                "skills": []
+            }
+        }
+    },
+    "白芷": {
+        "name": "白芷",
+        "base_hp": 0.0,
+        "base_atk": 0.0,
+        "base_def": 0.0,
+        "innate_stats": [],
+        "skills": [],
+        "buffs": {},
+        "image_file": "白芷.webp",
+        "weapon_type": "増幅器",
+        "attribute": "凝縮",
+        "constellations": {
+            "1": {
+                "buffs": {},
+                "skills": []
+            },
+            "2": {
+                "buffs": {},
+                "skills": []
+            },
+            "3": {
+                "buffs": {},
+                "skills": []
+            },
+            "4": {
+                "buffs": {},
+                "skills": []
+            },
+            "5": {
+                "buffs": {},
+                "skills": []
+            },
+            "6": {
+                "buffs": {},
+                "skills": []
+            }
+        }
+    },
+    "フィービー": {
+        "name": "フィービー",
+        "base_hp": 0.0,
+        "base_atk": 0.0,
+        "base_def": 0.0,
+        "innate_stats": [],
+        "skills": [],
+        "buffs": {},
+        "image_file": "フィービー.webp",
+        "weapon_type": "増幅器",
+        "attribute": "回折",
+        "constellations": {
+            "1": {
+                "buffs": {},
+                "skills": []
+            },
+            "2": {
+                "buffs": {},
+                "skills": []
+            },
+            "3": {
+                "buffs": {},
+                "skills": []
+            },
+            "4": {
+                "buffs": {},
+                "skills": []
+            },
+            "5": {
+                "buffs": {},
+                "skills": []
+            },
+            "6": {
+                "buffs": {},
+                "skills": []
+            }
+        }
+    },
+    "ブラント": {
+        "name": "ブラント",
+        "base_hp": 0.0,
+        "base_atk": 0.0,
+        "base_def": 0.0,
+        "innate_stats": [],
+        "skills": [],
+        "buffs": {},
+        "image_file": "ブラント.webp",
+        "weapon_type": "迅刀",
+        "attribute": "焦熱",
+        "constellations": {
+            "1": {
+                "buffs": {},
+                "skills": []
+            },
+            "2": {
+                "buffs": {},
+                "skills": []
+            },
+            "3": {
+                "buffs": {},
+                "skills": []
+            },
+            "4": {
+                "buffs": {},
+                "skills": []
+            },
+            "5": {
+                "buffs": {},
+                "skills": []
+            },
+            "6": {
+                "buffs": {},
+                "skills": []
+            }
+        }
+    },
+    "ルパ": {
+        "name": "ルパ",
+        "base_hp": 0.0,
+        "base_atk": 0.0,
+        "base_def": 0.0,
+        "innate_stats": [],
+        "skills": [],
+        "buffs": {},
+        "image_file": "ルパ.webp",
+        "weapon_type": "長刃",
+        "attribute": "焦熱",
+        "constellations": {
+            "1": {
+                "buffs": {},
+                "skills": []
+            },
+            "2": {
+                "buffs": {},
+                "skills": []
+            },
+            "3": {
+                "buffs": {},
+                "skills": []
+            },
+            "4": {
+                "buffs": {},
+                "skills": []
+            },
+            "5": {
+                "buffs": {},
+                "skills": []
+            },
+            "6": {
+                "buffs": {},
+                "skills": []
+            }
+        }
+    },
+    "ロココ": {
+        "name": "ロココ",
+        "base_hp": 0.0,
+        "base_atk": 0.0,
+        "base_def": 0.0,
+        "innate_stats": [],
+        "skills": [],
+        "buffs": {},
+        "image_file": "ロココ.webp",
+        "weapon_type": "手甲",
+        "attribute": "消滅",
+        "constellations": {
+            "1": {
+                "buffs": {},
+                "skills": []
+            },
+            "2": {
+                "buffs": {},
+                "skills": []
+            },
+            "3": {
+                "buffs": {},
+                "skills": []
+            },
+            "4": {
+                "buffs": {},
+                "skills": []
+            },
+            "5": {
+                "buffs": {},
+                "skills": []
+            },
+            "6": {
+                "buffs": {},
+                "skills": []
+            }
+        }
+    },
+    "鑑心": {
+        "name": "鑑心",
+        "base_hp": 0.0,
+        "base_atk": 0.0,
+        "base_def": 0.0,
+        "innate_stats": [],
+        "skills": [],
+        "buffs": {},
+        "image_file": "鑑心.webp",
+        "weapon_type": "",
+        "attribute": "気動",
+        "constellations": {
+            "1": {
+                "buffs": {},
+                "skills": []
+            },
+            "2": {
+                "buffs": {},
+                "skills": []
+            },
+            "3": {
+                "buffs": {},
+                "skills": []
+            },
+            "4": {
+                "buffs": {},
+                "skills": []
+            },
+            "5": {
+                "buffs": {},
+                "skills": []
+            },
+            "6": {
+                "buffs": {},
+                "skills": []
+            }
+        }
+    },
+    "吟霖": {
+        "name": "吟霖",
+        "base_hp": 0.0,
+        "base_atk": 0.0,
+        "base_def": 0.0,
+        "innate_stats": [],
+        "skills": [],
+        "buffs": {},
+        "image_file": "吟霖.webp",
+        "weapon_type": "増幅器",
+        "attribute": "電導",
+        "constellations": {
+            "1": {
+                "buffs": {},
+                "skills": []
+            },
+            "2": {
+                "buffs": {},
+                "skills": []
+            },
+            "3": {
+                "buffs": {},
+                "skills": []
+            },
+            "4": {
+                "buffs": {},
+                "skills": []
+            },
+            "5": {
+                "buffs": {},
+                "skills": []
+            },
+            "6": {
+                "buffs": {},
+                "skills": []
+            }
+        }
+    },
+    "今汐": {
+        "name": "今汐",
+        "base_hp": 0.0,
+        "base_atk": 0.0,
+        "base_def": 0.0,
+        "innate_stats": [],
+        "skills": [],
+        "buffs": {},
+        "image_file": "今汐.webp",
+        "weapon_type": "長刃",
+        "attribute": "回折",
+        "constellations": {
+            "1": {
+                "buffs": {},
+                "skills": []
+            },
+            "2": {
+                "buffs": {},
+                "skills": []
+            },
+            "3": {
+                "buffs": {},
+                "skills": []
+            },
+            "4": {
+                "buffs": {},
+                "skills": []
+            },
+            "5": {
+                "buffs": {},
+                "skills": []
+            },
+            "6": {
+                "buffs": {},
+                "skills": []
+            }
+        }
+    },
+    "散華": {
+        "name": "散華",
+        "base_hp": 0.0,
+        "base_atk": 0.0,
+        "base_def": 0.0,
+        "innate_stats": [],
+        "skills": [],
+        "buffs": {},
+        "image_file": "散華.webp",
+        "weapon_type": "迅刀",
+        "attribute": "凝縮",
+        "constellations": {
+            "1": {
+                "buffs": {},
+                "skills": []
+            },
+            "2": {
+                "buffs": {},
+                "skills": []
+            },
+            "3": {
+                "buffs": {},
+                "skills": []
+            },
+            "4": {
+                "buffs": {},
+                "skills": []
+            },
+            "5": {
+                "buffs": {},
+                "skills": []
+            },
+            "6": {
+                "buffs": {},
+                "skills": []
+            }
+        }
+    },
+    "折枝": {
+        "name": "折枝",
+        "base_hp": 0.0,
+        "base_atk": 0.0,
+        "base_def": 0.0,
+        "innate_stats": [],
+        "skills": [],
+        "buffs": {},
+        "image_file": "折枝.webp",
+        "weapon_type": "増幅器",
+        "attribute": "凝縮",
+        "constellations": {
+            "1": {
+                "buffs": {},
+                "skills": []
+            },
+            "2": {
+                "buffs": {},
+                "skills": []
+            },
+            "3": {
+                "buffs": {},
+                "skills": []
+            },
+            "4": {
+                "buffs": {},
+                "skills": []
+            },
+            "5": {
+                "buffs": {},
+                "skills": []
+            },
+            "6": {
+                "buffs": {},
+                "skills": []
+            }
+        }
+    },
+    "相里要": {
+        "name": "相里要",
+        "base_hp": 0.0,
+        "base_atk": 0.0,
+        "base_def": 0.0,
+        "innate_stats": [],
+        "skills": [],
+        "buffs": {},
+        "image_file": "相里要.webp",
+        "weapon_type": "手甲",
+        "attribute": "電導",
+        "constellations": {
+            "1": {
+                "buffs": {},
+                "skills": []
+            },
+            "2": {
+                "buffs": {},
+                "skills": []
+            },
+            "3": {
+                "buffs": {},
+                "skills": []
+            },
+            "4": {
+                "buffs": {},
+                "skills": []
+            },
+            "5": {
+                "buffs": {},
+                "skills": []
+            },
+            "6": {
+                "buffs": {},
+                "skills": []
+            }
+        }
+    },
+    "丹瑾": {
+        "name": "丹瑾",
+        "base_hp": 0.0,
+        "base_atk": 0.0,
+        "base_def": 0.0,
+        "innate_stats": [],
+        "skills": [],
+        "buffs": {},
+        "image_file": "丹瑾.webp",
+        "weapon_type": "迅刀",
+        "attribute": "消滅",
+        "constellations": {
+            "1": {
+                "buffs": {},
+                "skills": []
+            },
+            "2": {
+                "buffs": {},
+                "skills": []
+            },
+            "3": {
+                "buffs": {},
+                "skills": []
+            },
+            "4": {
+                "buffs": {},
+                "skills": []
+            },
+            "5": {
+                "buffs": {},
+                "skills": []
+            },
+            "6": {
+                "buffs": {},
+                "skills": []
+            }
+        }
+    },
+    "長離": {
+        "name": "長離",
+        "base_hp": 0.0,
+        "base_atk": 0.0,
+        "base_def": 0.0,
+        "innate_stats": [],
+        "skills": [],
+        "buffs": {},
+        "image_file": "長離.webp",
+        "weapon_type": "迅刀",
+        "attribute": "焦熱",
+        "constellations": {
+            "1": {
+                "buffs": {},
+                "skills": []
+            },
+            "2": {
+                "buffs": {},
+                "skills": []
+            },
+            "3": {
+                "buffs": {},
+                "skills": []
+            },
+            "4": {
+                "buffs": {},
+                "skills": []
+            },
+            "5": {
+                "buffs": {},
+                "skills": []
+            },
+            "6": {
+                "buffs": {},
+                "skills": []
+            }
+        }
+    },
+    "桃祈": {
+        "name": "桃祈",
+        "base_hp": 0.0,
+        "base_atk": 0.0,
+        "base_def": 0.0,
+        "innate_stats": [],
+        "skills": [],
+        "buffs": {},
+        "image_file": "桃祈.webp",
+        "weapon_type": "長刃",
+        "attribute": "消滅",
+        "constellations": {
+            "1": {
+                "buffs": {},
+                "skills": []
+            },
+            "2": {
+                "buffs": {},
+                "skills": []
+            },
+            "3": {
+                "buffs": {},
+                "skills": []
+            },
+            "4": {
+                "buffs": {},
+                "skills": []
+            },
+            "5": {
+                "buffs": {},
+                "skills": []
+            },
+            "6": {
+                "buffs": {},
+                "skills": []
+            }
+        }
+    },
+    "灯灯": {
+        "name": "灯灯",
+        "base_hp": 0.0,
+        "base_atk": 0.0,
+        "base_def": 0.0,
+        "innate_stats": [],
+        "skills": [],
+        "buffs": {},
+        "image_file": "灯灯.webp",
+        "weapon_type": "長刃",
+        "attribute": "電導",
+        "constellations": {
+            "1": {
+                "buffs": {},
+                "skills": []
+            },
+            "2": {
+                "buffs": {},
+                "skills": []
+            },
+            "3": {
+                "buffs": {},
+                "skills": []
+            },
+            "4": {
+                "buffs": {},
+                "skills": []
+            },
+            "5": {
+                "buffs": {},
+                "skills": []
+            },
+            "6": {
+                "buffs": {},
+                "skills": []
+            }
+        }
+    },
+    "漂泊者(回折)": {
+        "name": "漂泊者(回折)",
+        "base_hp": 0.0,
+        "base_atk": 0.0,
+        "base_def": 0.0,
+        "innate_stats": [],
+        "skills": [],
+        "buffs": {},
+        "image_file": "漂泊者回折.webp",
+        "weapon_type": "迅刀",
+        "attribute": "回折",
+        "constellations": {
+            "1": {
+                "buffs": {},
+                "skills": []
+            },
+            "2": {
+                "buffs": {},
+                "skills": []
+            },
+            "3": {
+                "buffs": {},
+                "skills": []
+            },
+            "4": {
+                "buffs": {},
+                "skills": []
+            },
+            "5": {
+                "buffs": {},
+                "skills": []
+            },
+            "6": {
+                "buffs": {},
+                "skills": []
+            }
+        }
+    },
+    "漂泊者(気動)": {
+        "name": "漂泊者(気動)",
+        "base_hp": 0.0,
+        "base_atk": 0.0,
+        "base_def": 0.0,
+        "innate_stats": [],
+        "skills": [],
+        "buffs": {},
+        "image_file": "漂泊者気動.webp",
+        "weapon_type": "迅刀",
+        "attribute": "気動",
+        "constellations": {
+            "1": {
+                "buffs": {},
+                "skills": []
+            },
+            "2": {
+                "buffs": {},
+                "skills": []
+            },
+            "3": {
+                "buffs": {},
+                "skills": []
+            },
+            "4": {
+                "buffs": {},
+                "skills": []
+            },
+            "5": {
+                "buffs": {},
+                "skills": []
+            },
+            "6": {
+                "buffs": {},
+                "skills": []
+            }
+        }
+    },
+    "漂泊者(消滅)": {
+        "name": "漂泊者(消滅)",
+        "base_hp": 0.0,
+        "base_atk": 0.0,
+        "base_def": 0.0,
+        "innate_stats": [],
+        "skills": [],
+        "buffs": {},
+        "image_file": "漂泊者消滅.webp",
+        "weapon_type": "迅刀",
+        "attribute": "消滅",
+        "constellations": {
+            "1": {
+                "buffs": {},
+                "skills": []
+            },
+            "2": {
+                "buffs": {},
+                "skills": []
+            },
+            "3": {
+                "buffs": {},
+                "skills": []
+            },
+            "4": {
+                "buffs": {},
+                "skills": []
+            },
+            "5": {
+                "buffs": {},
+                "skills": []
+            },
+            "6": {
+                "buffs": {},
+                "skills": []
+            }
+        }
+    },
+    "淵武": {
+        "name": "淵武",
+        "base_hp": 0.0,
+        "base_atk": 0.0,
+        "base_def": 0.0,
+        "innate_stats": [],
+        "skills": [],
+        "buffs": {},
+        "image_file": "淵武.webp",
+        "weapon_type": "手甲",
+        "attribute": "電導",
+        "constellations": {
+            "1": {
+                "buffs": {},
+                "skills": []
+            },
+            "2": {
+                "buffs": {},
+                "skills": []
+            },
+            "3": {
+                "buffs": {},
+                "skills": []
+            },
+            "4": {
+                "buffs": {},
+                "skills": []
+            },
+            "5": {
+                "buffs": {},
+                "skills": []
+            },
+            "6": {
+                "buffs": {},
+                "skills": []
+            }
+        }
+    },
+    "凌陽": {
+        "name": "凌陽",
+        "base_hp": 0.0,
+        "base_atk": 0.0,
+        "base_def": 0.0,
+        "innate_stats": [],
+        "skills": [],
+        "buffs": {},
+        "image_file": "凌陽.webp",
+        "weapon_type": "手甲",
+        "attribute": "凝縮",
+        "constellations": {
+            "1": {
+                "buffs": {},
+                "skills": []
+            },
+            "2": {
+                "buffs": {},
+                "skills": []
+            },
+            "3": {
+                "buffs": {},
+                "skills": []
+            },
+            "4": {
+                "buffs": {},
+                "skills": []
+            },
+            "5": {
+                "buffs": {},
+                "skills": []
+            },
+            "6": {
+                "buffs": {},
+                "skills": []
+            }
+        }
+    },
+    "熾霞": {
+        "name": "熾霞",
+        "base_hp": 0.0,
+        "base_atk": 0.0,
+        "base_def": 0.0,
+        "innate_stats": [],
+        "skills": [],
+        "buffs": {},
+        "image_file": "熾霞.webp",
+        "weapon_type": "拳銃",
+        "attribute": "焦熱",
+        "constellations": {
+            "1": {
+                "buffs": {},
+                "skills": []
+            },
+            "2": {
+                "buffs": {},
+                "skills": []
+            },
+            "3": {
+                "buffs": {},
+                "skills": []
+            },
+            "4": {
+                "buffs": {},
+                "skills": []
+            },
+            "5": {
+                "buffs": {},
+                "skills": []
+            },
+            "6": {
+                "buffs": {},
+                "skills": []
+            }
+        }
+    },
+    "秧秧": {
+        "name": "秧秧",
+        "base_hp": 0.0,
+        "base_atk": 0.0,
+        "base_def": 0.0,
+        "innate_stats": [],
+        "skills": [],
+        "buffs": {},
+        "image_file": "秧秧.webp",
+        "weapon_type": "",
+        "attribute": "気動",
+        "constellations": {
+            "1": {
+                "buffs": {},
+                "skills": []
+            },
+            "2": {
+                "buffs": {},
+                "skills": []
+            },
+            "3": {
+                "buffs": {},
+                "skills": []
+            },
+            "4": {
+                "buffs": {},
+                "skills": []
+            },
+            "5": {
+                "buffs": {},
+                "skills": []
+            },
+            "6": {
+                "buffs": {},
+                "skills": []
+            }
+        }
+    },
+    "釉瑚": {
+        "name": "釉瑚",
+        "base_hp": 0.0,
+        "base_atk": 0.0,
+        "base_def": 0.0,
+        "innate_stats": [],
+        "skills": [],
+        "buffs": {},
+        "image_file": "釉瑚.webp",
+        "weapon_type": "手甲",
+        "attribute": "凝縮",
+        "constellations": {
+            "1": {
+                "buffs": {},
+                "skills": []
+            },
+            "2": {
+                "buffs": {},
+                "skills": []
+            },
+            "3": {
+                "buffs": {},
+                "skills": []
+            },
+            "4": {
+                "buffs": {},
+                "skills": []
+            },
+            "5": {
+                "buffs": {},
+                "skills": []
+            },
+            "6": {
+                "buffs": {},
+                "skills": []
+            }
+        }
+    }
+}

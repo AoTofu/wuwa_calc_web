@@ -1,0 +1,918 @@
+/* style.css (新しいモダンテーマに上書き) */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap');
+
+/* --- カラーパレットとテーマ定義 --- */
+:root {
+    /* ベースカラー */
+    --color-background: #121828;
+    /* 深いネイビーブルー */
+    --color-surface: #1C243C;
+    /* 少し明るいサーフェス */
+    --color-border: #3A476F;
+    /* 境界線 */
+
+    /* アクセントカラー (青のグラデーション) */
+    --color-primary: #3B82F6;
+    --color-secondary: #818CF8;
+    --gradient-accent: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+
+    /* テキストカラー */
+    --color-text-primary: #F0F4FF;
+    /* メインテキスト (白に近い) */
+    --color-text-secondary: #A8B5D1;
+    /* サブテキスト */
+
+    /* その他の色 */
+    --color-danger: #EF4444;
+    --color-danger-hover: #F87171;
+    --color-success: #10B981;
+}
+
+/* --- グローバルスタイル --- */
+body,
+html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Noto Sans JP', sans-serif;
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    font-size: 14px;
+}
+
+/* --- メインレイアウト --- */
+.app-container {
+    display: flex;
+    height: 100vh;
+}
+
+/* --- サイドバー --- */
+.sidebar {
+    width: 250px;
+    background: var(--color-surface);
+    border-right: 1px solid var(--color-border);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.sidebar h2 {
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 25px;
+    background: var(--gradient-accent);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.nav-button {
+    width: 100%;
+    padding: 12px 20px;
+    margin-bottom: 8px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    text-align: left;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+}
+
+.nav-button:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--color-text-primary);
+}
+
+.nav-button.active {
+    background: var(--gradient-accent);
+    color: white;
+    font-weight: 700;
+    box-shadow: 0 4px 15px -5px var(--color-primary);
+}
+
+.username-container label {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    margin-bottom: 5px;
+}
+
+#username {
+    width: 100%;
+    padding: 8px 12px;
+    background-color: var(--color-background);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+.exit-button {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--color-danger);
+    border: none;
+    color: white;
+    font-weight: 700;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.exit-button:hover {
+    background-color: var(--color-danger-hover);
+}
+
+/* --- メインコンテンツ --- */
+.main-content {
+    flex-grow: 1;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    /* コンテンツが多い場合にスクロール */
+}
+
+.content-frame {
+    display: none;
+    flex-direction: column;
+    height: 100%;
+}
+
+.content-frame.visible {
+    display: flex;
+}
+
+/* CharacterSetupFrame Styles */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.page-title {
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.action-button {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    padding: 8px 16px;
+    margin-left: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.action-button:hover {
+    border-color: var(--color-primary);
+    color: var(--color-text-primary);
+}
+
+.team-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 20px;
+    flex-grow: 1;
+}
+
+.character-panel {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.2s ease-in-out;
+}
+
+.character-panel:hover {
+    box-shadow: 0 0 20px -5px var(--color-border);
+    border-color: var(--color-primary);
+}
+
+.panel-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.char-image {
+    width: 52px;
+    height: 52px;
+    background-color: var(--color-background);
+    border: 2px solid var(--color-border);
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.panel-title {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.item-images {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.item-image {
+    width: 42px;
+    height: 42px;
+    background-color: var(--color-background);
+    border-radius: 8px;
+}
+
+.build-details {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.build-details label {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+}
+
+.input-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.input-row>*:first-child {
+    flex-grow: 1;
+}
+
+select,
+.selector-button {
+    width: 100%;
+    padding: 8px 12px;
+    background-color: var(--color-background);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+    border-radius: 6px;
+    font-size: 13px;
+    transition: border-color 0.2s;
+}
+
+select:hover,
+.selector-button:hover {
+    border-color: var(--color-primary);
+}
+
+.selector-button {
+    cursor: pointer;
+    text-align: left;
+}
+
+/* EchoInputWidget specific styles */
+.echo-inputs-container {
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.echo-top-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.echo-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-text-primary);
+}
+
+.echo-label {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+}
+
+.echo-cost-menu {
+    width: 70px !important;
+}
+
+.echo-main-stat-row,
+.echo-sub-stat-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 8px;
+    align-items: center;
+}
+
+.echo-fixed-stat {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    padding-left: 10px;
+}
+
+/* Status Display */
+.status-display {
+    width: 100%;
+    background-color: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 10px;
+    font-family: monospace;
+    font-size: 12px;
+    color: var(--color-text-primary);
+    white-space: pre;
+    margin-top: auto;
+    height: 120px;
+}
+
+.save-build-button {
+    width: 100%;
+    padding: 8px;
+    margin-top: 15px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.save-build-button:hover {
+    border-color: var(--color-primary);
+    color: var(--color-text-primary);
+}
+
+/* Bottom Controls */
+.sub-panel {
+    background: var(--color-surface);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.enemy-settings,
+.effects-settings {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: center;
+    padding: 5px;
+}
+
+.small-entry {
+    background-color: var(--color-background);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+    width: 45px;
+    padding: 5px;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.bold-label {
+    font-weight: 700;
+}
+
+.abnormal-effects label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+}
+
+/* Proceed Button */
+.proceed-button {
+    width: 100%;
+    padding: 16px;
+    font-size: 18px;
+    font-weight: 700;
+    margin-top: 20px;
+    background: var(--gradient-accent);
+    border: none;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px -5px var(--color-primary);
+}
+
+.proceed-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px -5px var(--color-primary);
+}
+
+/* Switch Toggle */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 34px;
+    height: 20px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--color-border);
+    transition: .4s;
+    border-radius: 20px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: var(--color-text-primary);
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked+.slider {
+    background: var(--gradient-accent);
+}
+
+input:checked+.slider:before {
+    transform: translateX(14px);
+}
+
+#data-folder-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 0 10px 15px 10px;
+    /* 下に少し余白 */
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 15px;
+}
+
+#select-data-folder-btn {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 500;
+}
+
+#select-data-folder-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-text-primary);
+}
+
+#data-folder-status {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+}
+
+#data-folder-status.loaded {
+    color: var(--color-success);
+    font-weight: 500;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: none;
+    /* 初期状態では非表示 */
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.modal-overlay.visible {
+    display: flex;
+    /* 表示するときにflexにする */
+}
+
+.modal-content {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    height: 70%;
+    max-height: 800px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.modal-content h2 {
+    margin: 0 0 15px 0;
+    text-align: center;
+    font-size: 18px;
+}
+
+#popup-search {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    background-color: var(--color-background);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+    border-radius: 6px;
+}
+
+.scrollable-list {
+    flex-grow: 1;
+    overflow-y: auto;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 5px;
+}
+
+.popup-list-item {
+    width: 100%;
+    padding: 10px;
+    background-color: transparent;
+    border: none;
+    color: var(--color-text-secondary);
+    border-radius: 6px;
+    text-align: left;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.popup-list-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--color-text-primary);
+}
+
+.popup-close-button {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* --- ポップアップリストのアイテム (新しいスタイル) --- */
+.popup-list-item {
+    width: 100%;
+    padding: 10px 10px 10px 15px;
+    /* 左側にスペースを確保 */
+    background-color: transparent;
+    border: none;
+    border-left: 5px solid transparent;
+    /* 色の帯を表示する場所 */
+    color: var(--color-text-secondary);
+    border-radius: 6px;
+    text-align: left;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease-in-out;
+    position: relative;
+}
+
+.popup-list-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--color-text-primary);
+    border-left-color: var(--color-primary);
+    /* ホバー時にデフォルト色を表示 */
+}
+
+/* --- 属性ごとのスタイルを、左側のボーダー色に適用 --- */
+.popup-list-item.attr-aero {
+    border-left-color: #33FF99;
+}
+
+.popup-list-item.attr-fusion {
+    border-left-color: #FF4D4D;
+}
+
+.popup-list-item.attr-glacio {
+    border-left-color: #3399FF;
+}
+
+.popup-list-item.attr-electro {
+    border-left-color: #CC66FF;
+}
+
+.popup-list-item.attr-havoc {
+    border-left-color: #C71585;
+}
+
+.popup-list-item.attr-spectro {
+    border-left-color: #FFD700;
+}
+
+/* 選択された（ホバーされた）属性付きアイテムの色を調整 */
+.popup-list-item.attr-aero:hover,
+.popup-list-item.attr-fusion:hover,
+.popup-list-item.attr-glacio:hover,
+.popup-list-item.attr-electro:hover,
+.popup-list-item.attr-havoc:hover,
+.popup-list-item.attr-spectro:hover {
+    color: var(--color-text-primary);
+    /* ホバー時のテキスト色は統一 */
+}
+
+/* style.css (末尾に追記) */
+
+/* --- Rotation Editor Layout --- */
+.rotation-editor-layout {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    height: 100%;
+}
+
+/* Left Panel: Skill Selector */
+.skill-selector {
+    display: flex;
+    gap: 10px;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 15px;
+    width: 40%;
+    overflow-x: auto;
+    /* キャラが増えても横スクロールで対応 */
+}
+
+.skill-column {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 180px;
+    /* 各キャラ列の幅 */
+    flex-shrink: 0;
+}
+
+.skill-column-header {
+    font-size: 14px;
+    font-weight: 700;
+    padding: 8px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.skill-button {
+    padding: 6px 10px;
+    font-size: 12px;
+    background-color: var(--color-background);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: left;
+}
+
+.skill-button:hover {
+    border-color: var(--color-primary);
+    color: var(--color-text-primary);
+}
+
+/* Right Panel: Rotation Editor */
+.rotation-editor {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 15px;
+    width: 60%;
+}
+
+.tab-buttons {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.tab-button {
+    flex-grow: 1;
+    padding: 10px;
+    background-color: var(--color-background);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.tab-button.active {
+    background: var(--gradient-accent);
+    color: white;
+    font-weight: 700;
+    border-color: transparent;
+}
+
+.rotation-list-container {
+    flex-grow: 1;
+    overflow-y: auto;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 10px;
+    display: none;
+    /* Initially hidden */
+}
+
+.rotation-list-container.visible {
+    display: block;
+    /* Show active list */
+}
+
+/* style.css の .action-row 関連を置き換え */
+
+.action-row {
+    display: flex;
+    flex-direction: column;
+    /* 縦積みに変更 */
+    background-color: var(--color-background);
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    border: 1px solid var(--color-border);
+}
+
+.action-row-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.action-name {
+    flex-grow: 1;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.action-row-bottom {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.energy-display {
+    display: flex;
+    flex-direction: column;
+    font-size: 11px;
+    background-color: var(--color-surface);
+    padding: 4px 8px;
+    border-radius: 6px;
+    min-width: 80px;
+}
+
+.energy-label {
+    color: var(--color-text-secondary);
+}
+
+.energy-value {
+    font-weight: 700;
+    color: var(--color-text-primary);
+}
+
+.buff-list {
+    flex-grow: 1;
+    display: flex;
+    gap: 5px;
+    overflow-x: auto;
+    /* バフが多い場合にスクロール */
+    padding: 5px;
+    background-color: var(--color-surface);
+    border-radius: 6px;
+    min-height: 30px;
+    /* スクロールバー用の高さを確保 */
+}
+
+.buff-icon {
+    width: 24px;
+    height: 24px;
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* --- Output View Layout --- */
+.tab-content-container {
+    flex-grow: 1;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 15px;
+}
+
+.tab-content {
+    display: none;
+    width: 100%;
+    height: 100%;
+}
+
+.tab-content.visible {
+    display: block;
+}
+
+.placeholder-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    color: var(--color-text-secondary);
+}
+
+#graph-placeholder canvas {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.modal-button-primary,
+.modal-button-secondary {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.modal-button-primary {
+    background: var(--gradient-accent);
+    color: white;
+}
+
+.modal-button-secondary {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+}
+
+#save-build-overlay .modal-content {
+    max-width: 450px;
+    /* 少し幅を広げる */
+    height: auto;
+    /* 高さは自動調整 */
+}
+
+#save-build-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    text-align: left;
+}
+
+#save-build-prompt {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+#save-build-input {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--color-background);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.2s ease-in-out;
+    box-sizing: border-box;
+
+}
+
+#save-build-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 10px -2px var(--color-primary);
+}

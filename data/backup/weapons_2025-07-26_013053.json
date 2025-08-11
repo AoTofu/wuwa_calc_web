@@ -1,0 +1,545 @@
+{
+    "蒼鱗連峰": {
+        "name": "蒼鱗連峰",
+        "image_file": "蒼鱗連峰.webp",
+        "buffs": {
+            "蒼鱗連峰": {
+                "description": "全ダメアップ",
+                "trigger": "常時",
+                "effects": [
+                    {
+                        "target": "self",
+                        "type": "単純加算",
+                        "stat_to_buff": "all_damage_up",
+                        "value": [
+                            12.0,
+                            15.0,
+                            18.0,
+                            21.0,
+                            24.0
+                        ],
+                        "trigger": "常時"
+                    }
+                ]
+            }
+        },
+        "base_atk": 587.0,
+        "sub_stat": {
+            "name": "クリティカルダメージ",
+            "value": 48.6,
+            "key": "crit_damage"
+        },
+        "weapon_type": "長刃",
+        "effect_data": {
+            "description": "武器効果 常時",
+            "trigger": [
+                {
+                    "event": "常時",
+                    "source": "自身発動"
+                }
+            ],
+            "effects": [
+                {
+                    "type": "単純加算",
+                    "stat_to_buff": "all_damage_up",
+                    "value": [
+                        12.0,
+                        15.0,
+                        18.0,
+                        21.0,
+                        24.0
+                    ]
+                }
+            ],
+            "target": "自身"
+        },
+        "rarity": "★5"
+    },
+    "奇妙バリエーション": {
+        "name": "奇妙バリエーション",
+        "image_file": "奇妙バリエーション.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "増幅器"
+    },
+    "歳華調和": {
+        "name": "歳華調和",
+        "image_file": "歳華調和.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "長刃",
+        "rarity": "★5"
+    },
+    "仙境の湖光": {
+        "name": "仙境の湖光",
+        "image_file": "仙境の湖光.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "長刃",
+        "rarity": "★5"
+    },
+    "闘炎の爪痕": {
+        "name": "闘炎の爪痕",
+        "image_file": "闘炎の爪痕.webp",
+        "buffs": {},
+        "base_atk": 587.0,
+        "sub_stat": {
+            "name": "クリティカルダメージ",
+            "value": 48.6,
+            "key": "crit_damage"
+        },
+        "weapon_type": "長刃",
+        "rarity": "★5"
+    },
+    "寛恕のタ・エイス・ヘアウトン": {
+        "name": "寛恕のタ・エイス・ヘアウトン",
+        "image_file": "寛恕のタエイスヘアウトン.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "長刃",
+        "rarity": "★4"
+    },
+    "逆行の星": {
+        "name": "逆行の星",
+        "image_file": "逆行の星.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "長刃",
+        "rarity": "★4"
+    },
+    "秋の名残": {
+        "name": "秋の名残",
+        "image_file": "秋の名残.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "長刃",
+        "rarity": "★4"
+    },
+    "重破刃41": {
+        "name": "重破刃41",
+        "image_file": "重破刃41.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "長刃",
+        "rarity": "★4"
+    },
+    "長夜の灯火": {
+        "name": "長夜の灯火",
+        "image_file": "長夜の灯火.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "長刃",
+        "rarity": "★4"
+    },
+    "破滅に迫る赤方偏移": {
+        "name": "破滅に迫る赤方偏移",
+        "image_file": "破滅に迫る赤方偏移.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "長刃",
+        "rarity": "★4"
+    },
+    "霊感ディスコード": {
+        "name": "霊感ディスコード",
+        "image_file": "霊感ディスコード.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "長刃",
+        "rarity": "★4"
+    },
+    "深海の囁き": {
+        "name": "深海の囁き",
+        "image_file": "深海の囁き.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "増幅器"
+    },
+    "コアが溶融する降着円盤": {
+        "name": "コアが溶融する降着円盤",
+        "image_file": "コアが溶融する降着円盤.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "増幅器"
+    },
+    "英子の湖岸": {
+        "name": "英子の湖岸",
+        "image_file": "英子の湖岸.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "増幅器"
+    },
+    "海の恩恵": {
+        "name": "海の恩恵",
+        "image_file": "海の恩恵.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "増幅器"
+    },
+    "海淵のリフレイン": {
+        "name": "海淵のリフレイン",
+        "image_file": "海淵のリフレイン.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "増幅器"
+    },
+    "虚飾のワルツ": {
+        "name": "虚飾のワルツ",
+        "image_file": "虚飾のワルツ.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "増幅器"
+    },
+    "光のハルモニア": {
+        "name": "光のハルモニア",
+        "image_file": "光のハルモニア.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "増幅器"
+    },
+    "今州の衛士": {
+        "name": "今州の衛士",
+        "image_file": "今州の衛士.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "増幅器"
+    },
+    "糸繰りの奇術": {
+        "name": "糸繰りの奇術",
+        "image_file": "糸繰りの奇術.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "増幅器"
+    },
+    "星々のコンチェルト": {
+        "name": "星々のコンチェルト",
+        "image_file": "星々のコンチェルト.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "増幅器"
+    },
+    "清らかな音": {
+        "name": "清らかな音",
+        "image_file": "清らかな音.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "増幅器"
+    },
+    "氷華の雅印": {
+        "name": "氷華の雅印",
+        "image_file": "氷華の雅印.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "増幅器"
+    },
+    "変化の星": {
+        "name": "変化の星",
+        "image_file": "変化の星.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "増幅器"
+    },
+    "鳴動機25": {
+        "name": "鳴動機25",
+        "image_file": "鳴動機25.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "増幅器"
+    },
+    "ラストダンス": {
+        "name": "ラストダンス",
+        "image_file": "ラストダンス.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "拳銃"
+    },
+    "華麗カテンツァ": {
+        "name": "華麗カテンツァ",
+        "image_file": "華麗カテンツァ.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "拳銃"
+    },
+    "疾走の星": {
+        "name": "疾走の星",
+        "image_file": "疾走の星.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "拳銃"
+    },
+    "穿撃銃26": {
+        "name": "穿撃銃26",
+        "image_file": "穿撃銃26.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "拳銃"
+    },
+    "燃え尽きぬ焔": {
+        "name": "燃え尽きぬ焔",
+        "image_file": "燃え尽きぬ焔.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "拳銃"
+    },
+    "不変の湖煙": {
+        "name": "不変の湖煙",
+        "image_file": "不変の湖煙.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "拳銃"
+    },
+    "別れのメロス": {
+        "name": "別れのメロス",
+        "image_file": "別れのメロス.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "拳銃"
+    },
+    "悖理を説く宇宙ジェット": {
+        "name": "悖理を説く宇宙ジェット",
+        "image_file": "悖理を説く宇宙ジェット.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "拳銃"
+    },
+    "迸る雷霆": {
+        "name": "迸る雷霆",
+        "image_file": "迸る雷霆.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "拳銃"
+    },
+    "森のアリア": {
+        "name": "森のアリア",
+        "image_file": "森のアリア.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "拳銃"
+    },
+    "トラジコメーディア": {
+        "name": "トラジコメーディア",
+        "image_file": "トラジコメーディア.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "手甲"
+    },
+    "焔光の裁き": {
+        "name": "焔光の裁き",
+        "image_file": "焔光の裁き.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "手甲"
+    },
+    "黄金の拳": {
+        "name": "黄金の拳",
+        "image_file": "黄金の拳.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "手甲"
+    },
+    "狂乱マルカート": {
+        "name": "狂乱マルカート",
+        "image_file": "狂乱マルカート.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "手甲"
+    },
+    "驚異の星": {
+        "name": "驚異の星",
+        "image_file": "驚異の星.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "手甲"
+    },
+    "金鉄の志": {
+        "name": "金鉄の志",
+        "image_file": "金鉄の志.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "手甲"
+    },
+    "鋼影拳21四番": {
+        "name": "鋼影拳21四番",
+        "image_file": "鋼影拳21四番.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "手甲"
+    },
+    "星屑が捩れる渦巻腕": {
+        "name": "星屑が捩れる渦巻腕",
+        "image_file": "星屑が捩れる渦巻腕.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "手甲"
+    },
+    "怒涛の湖音": {
+        "name": "怒涛の湖音",
+        "image_file": "怒涛の湖音.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "手甲"
+    },
+    "万端の枢機": {
+        "name": "万端の枢機",
+        "image_file": "万端の枢機.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "手甲"
+    },
+    "酩酊のエボス": {
+        "name": "酩酊のエボス",
+        "image_file": "酩酊のエボス.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "手甲"
+    },
+    "エンドレスボヤージュ": {
+        "name": "エンドレスボヤージュ",
+        "image_file": "エンドレスボヤージュ.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "迅刀",
+        "rarity": "★5"
+    },
+    "永遠を砕く重力崩壊": {
+        "name": "永遠を砕く重力崩壊",
+        "image_file": "永遠を砕く重力崩壊.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "迅刀"
+    },
+    "赫く燃ゆる流光": {
+        "name": "赫く燃ゆる流光",
+        "image_file": "赫く燃ゆる流光.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "迅刀"
+    },
+    "決死の一人戦": {
+        "name": "決死の一人戦",
+        "image_file": "決死の一人戦.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "迅刀"
+    },
+    "血の盟約": {
+        "name": "血の盟約",
+        "image_file": "血の盟約.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "迅刀"
+    },
+    "行進オーバーチュア": {
+        "name": "行進オーバーチュア",
+        "image_file": "行進オーバーチュア.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "迅刀"
+    },
+    "春裁ち": {
+        "name": "春裁ち",
+        "image_file": "春裁ち.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "迅刀"
+    },
+    "心の錨": {
+        "name": "心の錨",
+        "image_file": "心の錨.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "迅刀"
+    },
+    "千古の湖水": {
+        "name": "千古の湖水",
+        "image_file": "千古の湖水.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "迅刀"
+    },
+    "倒錯の星": {
+        "name": "倒錯の星",
+        "image_file": "倒錯の星.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "迅刀"
+    },
+    "風刺のファブリオー": {
+        "name": "風刺のファブリオー",
+        "image_file": "風刺のファブリオー.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "迅刀"
+    },
+    "万象変遷": {
+        "name": "万象変遷",
+        "image_file": "万象変遷.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "迅刀"
+    },
+    "定めを覆す荊冠": {
+        "name": "定めを覆す荊冠",
+        "image_file": "定めを覆す荊冠.webp",
+        "buffs": {},
+        "base_atk": 0.0,
+        "sub_stat": {},
+        "weapon_type": "迅刀"
+    }
+}

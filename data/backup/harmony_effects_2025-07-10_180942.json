@@ -1,0 +1,118 @@
+{
+    "夜にこびり付く白霜": {
+        "name": "夜にこびり付く白霜",
+        "image_file": "夜にこびり付く白霜.webp",
+        "buffs": {
+            "凝縮": {
+                "description": "2セット効果",
+                "trigger": "常時",
+                "effects": [
+                    {
+                        "target": "self",
+                        "type": "単純加算",
+                        "stat_to_buff": "glacio_dmg_up",
+                        "value": 10.0,
+                        "trigger": "常時"
+                    }
+                ]
+            }
+        },
+        "damage_effects": []
+    },
+    "ハウリングフレイム": {
+        "name": "ハウリングフレイム",
+        "image_file": "ハウリングフレイム.webp",
+        "buffs": {},
+        "damage_effects": []
+    },
+    "山を轟かせる崩火": {
+        "name": "山を轟かせる崩火",
+        "image_file": "山を轟かせる崩火.webp",
+        "buffs": {},
+        "damage_effects": []
+    },
+    "空を切り裂く冥雷": {
+        "name": "空を切り裂く冥雷",
+        "image_file": "空を切り裂く冥雷.webp",
+        "buffs": {},
+        "damage_effects": []
+    },
+    "谷を突き抜ける長風": {
+        "name": "谷を突き抜ける長風",
+        "image_file": "谷を突き抜ける長風.webp",
+        "buffs": {},
+        "damage_effects": []
+    },
+    "闇を取り払う浮星": {
+        "name": "闇を取り払う浮星",
+        "image_file": "闇を取り払う浮星.webp",
+        "buffs": {},
+        "damage_effects": []
+    },
+    "二度と輝かない沈日": {
+        "name": "二度と輝かない沈日",
+        "image_file": "二度と輝かない沈日.webp",
+        "buffs": {},
+        "damage_effects": []
+    },
+    "喧騒に隠す回光": {
+        "name": "喧騒に隠す回光",
+        "image_file": "喧騒に隠す回光.webp",
+        "buffs": {},
+        "damage_effects": []
+    },
+    "月を窺う軽雲": {
+        "name": "月を窺う軽雲",
+        "image_file": "月を窺う軽雲.webp",
+        "buffs": {},
+        "damage_effects": []
+    },
+    "絶えない余韻": {
+        "name": "絶えない余韻",
+        "image_file": "絶えない余韻.webp",
+        "buffs": {},
+        "damage_effects": []
+    },
+    "フロステッドハート": {
+        "name": "フロステッドハート",
+        "image_file": "フロステッドハート.webp",
+        "buffs": {},
+        "damage_effects": []
+    },
+    "エターナルライト": {
+        "name": "エターナルライト",
+        "image_file": "エターナルライト.webp",
+        "buffs": {},
+        "damage_effects": []
+    },
+    "ミッドナイトベール": {
+        "name": "ミッドナイトベール",
+        "image_file": "ミッドナイトベール.webp",
+        "buffs": {},
+        "damage_effects": []
+    },
+    "セレッシャルアンサム": {
+        "name": "セレッシャルアンサム",
+        "image_file": "セレッシャルアンサム.webp",
+        "buffs": {},
+        "damage_effects": []
+    },
+    "タイズターニングヴァラ": {
+        "name": "タイズターニングヴァラ",
+        "image_file": "タイズターニングヴァラ.webp",
+        "buffs": {},
+        "damage_effects": []
+    },
+    "バウンドレススカイ": {
+        "name": "バウンドレススカイ",
+        "image_file": "バウンドレススカイ.webp",
+        "buffs": {},
+        "damage_effects": []
+    },
+    "グロリアスウィンド": {
+        "name": "グロリアスウィンド",
+        "image_file": "グロリアスウィンド.webp",
+        "buffs": {},
+        "damage_effects": []
+    }
+}
