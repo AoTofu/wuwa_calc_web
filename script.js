@@ -802,15 +802,27 @@ async def generate_graph(results, theme_colors):
     }
 
     // ▼▼▼ 変更点: この関数を全面的に刷新 ▼▼▼
+    // script.js の onCharacterSelect 関数を置き換え
     async function onCharacterSelect(panelIndex) {
-        const characters = Object.values(dataManager.getData('characters', {}))
+        const charactersWithOptions = Object.values(dataManager.getData('characters', {}))
             .map(c => ({ name: c.name, yomigana: c.yomigana || '', attribute: c.attribute }));
 
-        const selectedCharName = await searchablePopup.open("キャラクターを選択", characters);
+        const selectedCharName = await searchablePopup.open("キャラクターを選択", charactersWithOptions);
         
         if (selectedCharName) {
             const panel = document.querySelector(`.character-panel[data-panel-index="${panelIndex}"]`);
             panel.querySelector('[data-type="character"]').textContent = selectedCharName;
+            
+            // ▼▼▼ ここからが修正点 ▼▼▼
+            const charData = dataManager.getData('characters', {})[selectedCharName];
+            const charImageEl = panel.querySelector('.char-image');
+            if (charData && charData.image_file) {
+                charImageEl.style.backgroundImage = `url(images/characters/${charData.image_file})`;
+                charImageEl.style.backgroundSize = 'cover';
+            } else {
+                charImageEl.style.backgroundImage = 'none';
+            }
+            // ▲▲▲ ここまで ▲▲▲
             
             const weaponButton = panel.querySelector('[data-type="weapon"]');
             weaponButton.disabled = false;
@@ -826,6 +838,7 @@ async def generate_graph(results, theme_colors):
     }
 
     // 武器選択ボタンのクリックハンドラ
+    // script.js の onWeaponSelect 関数を置き換え
     async function onWeaponSelect(panelIndex) {
         const panel = document.querySelector(`.character-panel[data-panel-index="${panelIndex}"]`);
         const charName = panel.querySelector('[data-type="character"]').textContent;
@@ -842,19 +855,57 @@ async def generate_graph(results, theme_colors):
         const selectedWeapon = await searchablePopup.open(`${weaponType} を選択`, weapons);
         if (selectedWeapon) {
             panel.querySelector('[data-type="weapon"]').textContent = selectedWeapon;
+            
+            // ▼▼▼ ここからが修正点 ▼▼▼
+            const weaponData = dataManager.getData('weapons', {})[selectedWeapon];
+            const weaponImageEl = panel.querySelector('.item-images .item-image:nth-child(1)'); // 1番目のitem-imageを選択
+            if (weaponData && weaponData.image_file) {
+                weaponImageEl.style.backgroundImage = `url(images/weapons/${weaponData.image_file})`;
+                weaponImageEl.style.backgroundSize = 'cover';
+            } else {
+                weaponImageEl.style.backgroundImage = 'none';
+            }
+            // ▲▲▲ ここまで ▲▲▲
+            
             updatePanelStats(panelIndex);
         }
     }
 
     // ▼▼▼ 変更点: ビルド読込/保存のための新関数を追加 ▼▼▼
-// script.js の loadBuildToPanel 関数を、これで置き換える
-
+    // script.js の loadBuildToPanel 関数を、これで置き換える
+    // script.js の loadBuildToPanel 関数を置き換え
     function loadBuildToPanel(panelIndex, buildName) {
         if (!buildName) return;
         const buildData = dataManager.getData('builds', {})[buildName];
         if (!buildData) return;
 
         const panel = document.querySelector(`.character-panel[data-panel-index="${panelIndex}"]`);
+        
+        // ▼▼▼ ここからが修正点 ▼▼▼
+        const charData = dataManager.getData('characters', {})[buildData.character_name];
+        const weaponData = dataManager.getData('weapons', {})[buildData.weapon_name];
+        
+        // キャラクター画像を設定
+        const charImageEl = panel.querySelector('.char-image');
+        if (charData && charData.image_file) {
+            charImageEl.style.backgroundImage = `url(images/characters/${charData.image_file})`;
+            charImageEl.style.backgroundSize = 'cover';
+        } else {
+            charImageEl.style.backgroundImage = 'none';
+        }
+
+        // 武器画像を設定
+        const weaponImageEl = panel.querySelector('.item-images .item-image:nth-child(1)');
+        if (weaponData && weaponData.image_file) {
+            weaponImageEl.style.backgroundImage = `url(images/weapons/${weaponData.image_file})`;
+            weaponImageEl.style.backgroundSize = 'cover';
+        } else {
+            weaponImageEl.style.backgroundImage = 'none';
+        }
+        
+        // キャラクター名を設定
+        panel.querySelector('[data-type="character"]').textContent = buildData.character_name || 'キャラクターを選択';
+        // ▲▲▲ ここまで ▲▲▲
         
         // 基本情報の設定
         panel.querySelector('[data-type="weapon"]').textContent = buildData.weapon_name || '武器を選択';
