@@ -179,6 +179,36 @@
         </div>
     </div>
 
+    <!-- ▼▼▼ 汎用フォームエディタ用モーダル ▼▼▼ -->
+    <div id="form-editor-overlay" class="modal-overlay">
+        <div class="modal-content wide">
+            <h2 id="form-editor-title">エディタ</h2>
+            <div class="editor-layout">
+                <!-- 左側: 画像と基本情報 -->
+                <div class="editor-sidebar">
+                    <div id="editor-image-preview" class="editor-image"></div>
+                    <button id="editor-image-select-btn" class="image-select-button">画像を選択...</button>
+                    <div id="editor-main-fields" class="editor-fields-container">
+                        <!-- 基本情報フォームがここに生成されます -->
+                    </div>
+                </div>
+                <!-- 右側: タブ付きの詳細情報 -->
+                <div class="editor-main-content">
+                    <div class="tab-buttons" id="editor-tabs">
+                        <!-- タブボタンがここに生成されます -->
+                    </div>
+                    <div id="editor-tab-contents" class="editor-tab-container">
+                        <!-- タブのコンテンツがここに生成されます -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button id="form-editor-save-btn" class="modal-button-primary">保存して閉じる</button>
+                <button id="form-editor-cancel-btn" class="modal-button-secondary">キャンセル</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Pyodide本体と、アプリケーションのスクリプトを読み込む -->
     <script src="https://cdn.jsdelivr.net/pyodide/v0.25.1/full/pyodide.js"></script>
     <script src="script.js"></script>
