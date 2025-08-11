@@ -1,4 +1,4 @@
-// script.js (currentDataType修正版 - 全面的に上書き)
+// script.js (完成版)
 
 // -----------------------------------------------------------------------------
 // DataManager モジュール (data_manager.py のWeb版)
@@ -19,33 +19,28 @@ const dataManager = {
     async initialize() {
         if (!('showDirectoryPicker' in window)) {
             console.warn("File System Access API is not supported. Using fallback mode.");
-            // フォールバック用の初期化処理をここに追加 (将来のステップ)
             this.isInitialized = true;
-            return;
+            return false;
         }
 
         try {
-            // ユーザーに 'data' ディレクトリを選択させる
-            this.dataDirHandle = await window.showDirectoryPicker({
-                id: 'wuwa-calc-data-dir', // 記憶用ID
-                mode: 'readwrite'
-            });
-
+            this.dataDirHandle = await window.showDirectoryPicker({ id: 'wuwa-calc-data-dir', mode: 'readwrite' });
             await this._verifyDirectoryPermissions();
             await this._loadAllData();
             this.isInitialized = true;
             document.getElementById('data-folder-status').textContent = `フォルダ '${this.dataDirHandle.name}' を読み込みました`;
             document.getElementById('data-folder-status').classList.add('loaded');
             console.log("DataManager initialized successfully with File System Access API.");
+            return true;
 
         } catch (error) {
             if (error.name === 'AbortError') {
                 console.warn("Directory selection was cancelled by the user.");
-                // alertは不要、ユーザーがキャンセルしたのは意図的な操作
             } else {
                 console.error("Error initializing DataManager:", error);
-                alert("データフォルダの読み込み中にエラーが発生しました。詳細はコンソールを確認してください。");
+                await customModals.alert("読込エラー", "データフォルダの読み込み中にエラーが発生しました。\n詳細はコンソールを確認してください。");
             }
+            return false;
         }
     },
 
@@ -208,8 +203,6 @@ const searchablePopup = {
             button.dataset.value = displayName;
 
             if (typeof opt === 'object' && opt.attribute) {
-                // 属性名を小文字にしてCSSクラスとして使えるようにする
-                // 例: "気動" -> "aero" (これは仮。constants.pyのマッピングを使うのが理想)
                 const attrClass = {
                     "気動": "aero", "焦熱": "fusion", "凝縮": "glacio",
                     "電導": "electro", "消滅": "havoc", "回折": "spectro"
@@ -281,6 +274,38 @@ const customModals = {
             };
 
             okBtn.onclick = () => cleanup();
+        });
+    },
+
+    // (注: promptは元のコードになかったが、変更指示のコードで使われているため追加)
+    prompt(title, text) {
+        return new Promise(resolve => {
+            const overlay = document.getElementById('save-build-overlay');
+            const titleEl = document.getElementById('save-build-title');
+            const input = document.getElementById('save-build-input');
+            const confirmBtn = document.getElementById('save-build-confirm-btn');
+            const cancelBtn = document.getElementById('save-build-cancel-btn');
+            
+            titleEl.textContent = title;
+            // promptにはテキストがないので、inputのplaceholderで代用
+            input.placeholder = text;
+            input.value = '';
+            overlay.classList.add('visible');
+            input.focus();
+    
+            const cleanup = (value) => {
+                overlay.classList.remove('visible');
+                confirmBtn.onclick = null;
+                cancelBtn.onclick = null;
+                overlay.onclick = null;
+                input.onkeyup = null;
+                resolve(value);
+            };
+    
+            confirmBtn.onclick = () => cleanup(input.value);
+            cancelBtn.onclick = () => cleanup(null);
+            overlay.onclick = (e) => { if (e.target === overlay) cleanup(null); };
+            input.onkeyup = (e) => { if (e.key === 'Enter') cleanup(input.value); };
         });
     }
 };
@@ -357,15 +382,30 @@ const characterEditor = {
 };
 
 // -----------------------------------------------------------------------------
-// Pyodide 初期化とメインロジック
+// メインアプリケーションロジック
 // -----------------------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', async () => {
 
+    // --- グローバル状態変数 ---
     let pyodide = null;
     let calculatorModule = null;
-    let recalculateHelper = null; // Pythonヘルパーモジュールを保持する変数
-    let exportersModule = null; // exporters.py用
-    let graphHelper = null; // graph_helperモジュールを保持する変数
+    let recalculateHelper = null;
+    let exportersModule = null;
+    let graphHelper = null;
+    let currentDataType = 'characters'; // どのデータタブを選択しているか
+
+    let appState = {
+        team_builds: [],
+        rotation_initial: [],
+        rotation_loop: [],
+        currentRotationView: 'initial'
+    };
+    
+    const GAME_DATA = {
+        ECHO_DATA: { "main_stats": { "4": [{ "name": "HP%", "value": 33, "key": "hp_percent" }, { "name": "攻撃力%", "value": 33, "key": "atk_percent" }, { "name": "防御力%", "value": 41.5, "key": "def_percent" }, { "name": "クリティカル率", "value": 22, "key": "crit_rate" }, { "name": "クリティカルダメージ", "value": 44, "key": "crit_damage" }, { "name": "治療効果アップ", "value": 26.4, "key": "heal_bonus" }], "3": [{ "name": "気動ダメージアップ", "value": 30, "key": "aero_dmg_up" }, { "name": "焦熱ダメージアップ", "value": 30, "key": "fusion_dmg_up" }, { "name": "電導ダメージアップ", "value": 30, "key": "electro_dmg_up" }, { "name": "凝縮ダメージアップ", "value": 30, "key": "glacio_dmg_up" }, { "name": "消滅ダメージアップ", "value": 30, "key": "havoc_dmg_up" }, { "name": "回折ダメージアップ", "value": 30, "key": "spectro_dmg_up" }, { "name": "共鳴効率", "value": 32, "key": "resonance_efficiency" }, { "name": "攻撃力%", "value": 30, "key": "atk_percent" }, { "name": "HP%", "value": 30, "key": "hp_percent" }, { "name": "防御力%", "value": 38, "key": "def_percent" }], "1": [{ "name": "HP%", "value": 22.8, "key": "hp_percent" }, { "name": "攻撃力%", "value": 18, "key": "atk_percent" }, { "name": "防御力%", "value": 18, "key": "def_percent" }] }, "fixed_main_stats": { "4": { "name": "攻撃力(数値)", "value": 150, "key": "atk_flat" }, "3": { "name": "攻撃力(数値)", "value": 100, "key": "atk_flat" }, "1": { "name": "HP(数値)", "value": 1520, "key": "hp_flat" } }, "sub_stat_values": { "HP%": { "key": "hp_percent", "values": [6.4, 7.1, 7.9, 8.6, 9.4, 10.1, 10.9, 11.6] }, "攻撃力%": { "key": "atk_percent", "values": [6.4, 7.1, 7.9, 8.6, 9.4, 10.1, 10.9, 11.6] }, "防御力%": { "key": "def_percent", "values": [8.1, 9, 10, 10.9, 11.8, 12.8, 13.6, 14.7] }, "クリティカル率": { "key": "crit_rate", "values": [6.3, 6.9, 7.5, 8.1, 8.7, 9.3, 9.9, 10.5] }, "クリティカルダメージ": { "key": "crit_damage", "values": [12.6, 13.8, 15, 16.2, 17.4, 18.6, 19.8, 21] }, "HP(数値)": { "key": "hp_flat", "values": [320, 360, 390, 430, 470, 510, 540, 580] }, "攻撃力(数値)": { "key": "atk_flat", "values": [30, 30, 40, 40, 50, 50, 60, 60] }, "防御力(数値)": { "key": "def_flat", "values": [40, 40, 50, 50, 60, 60, 70, 70] }, "共鳴効率": { "key": "resonance_efficiency", "values": [6.8, 7.6, 8.4, 9.2, 10, 10.8, 11.6, 12.4] }, "通常攻撃ダメージアップ": { "key": "normal_attack_dmg_up", "values": [6.4, 7.1, 7.9, 8.6, 9.4, 10.1, 10.9, 11.6] }, "重撃ダメージアップ": { "key": "heavy_attack_dmg_up", "values": [6.4, 7.1, 7.9, 8.6, 9.4, 10.1, 10.9, 11.6] }, "共鳴スキルダメージアップ": { "key": "resonance_skill_dmg_up", "values": [6.4, 7.1, 7.9, 8.6, 9.4, 10.1, 10.9, 11.6] }, "共鳴解放ダメージアップ": { "key": "resonance_liberation_dmg_up", "values": [6.4, 7.1, 7.9, 8.6, 9.4, 10.1, 10.9, 11.6] } } },
+        ECHO_SUB_STAT_TYPES: ["HP%", "攻撃力%", "防御力%", "クリティカル率", "クリティカルダメージ", "HP(数値)", "攻撃力(数値)", "防御力(数値)", "共鳴効率", "通常攻撃ダメージアップ", "重撃ダメージアップ", "共鳴スキルダメージアップ", "共鳴解放ダメージアップ"],
+        ABNORMAL_EFFECTS: ["騒光効果", "風蝕効果", "斉爆効果", "虚滅効果"]
+    };
 
     // --- Pythonヘルパーコード ---
     const pythonRecalculateHelper = `
@@ -508,6 +548,7 @@ async def generate_graph(results, theme_colors):
     return base64.b64encode(buf.read()).decode('utf-8')
 `;
 
+    // --- 初期化関数 ---
     async function initializePyodide() {
         showStatus("Pyodideを初期化中...");
         pyodide = await loadPyodide();
@@ -522,7 +563,6 @@ async def generate_graph(results, theme_colors):
             fetch('./exporters.py').then(res => res.text()),
             fetch('./gui_widgets.py').then(res => res.text())
         ]);
-        // 依存関係の末端から順にファイルシステムに書き込む
         pyodide.FS.writeFile("app_types.py", appTypesCode, { encoding: "utf8" });
         pyodide.FS.writeFile("constants.py", constCode, { encoding: "utf8" });
         pyodide.FS.writeFile("gui_widgets.py", guiWidgetsCode, { encoding: "utf8" });
@@ -532,7 +572,6 @@ async def generate_graph(results, theme_colors):
         pyodide.FS.writeFile("recalculate_helper.py", pythonRecalculateHelper, { encoding: "utf8" });
         pyodide.FS.writeFile("graph_helper.py", pythonGraphHelper, { encoding: "utf8" });
 
-        // pyimportする前に、Python側で直接import文を実行してモジュールをロードさせる
         pyodide.runPython(`
             import app_types
             import constants
@@ -543,7 +582,6 @@ async def generate_graph(results, theme_colors):
             import graph_helper
         `);
 
-        // runPythonで成功していれば、pyimportはキャッシュからロードするので安全
         calculatorModule = pyodide.pyimport("calculator");
         exportersModule = pyodide.pyimport("exporters");
         recalculateHelper = pyodide.pyimport("recalculate_helper");
@@ -551,232 +589,68 @@ async def generate_graph(results, theme_colors):
 
         showStatus("準備完了！", true);
     }
-
+    
+    // --- UI表示関数 ---
     function showFrame(frameKey) {
         document.querySelectorAll('.content-frame').forEach(f => f.classList.remove('visible'));
         document.querySelectorAll('.nav-button').forEach(b => b.classList.remove('active'));
         document.getElementById(`frame-${frameKey}`).classList.add('visible');
         document.getElementById(`btn-${frameKey}`).classList.add('active');
-    }
-
-    function setupStatusDisplay() {
-        const statusDiv = document.createElement('div');
-        statusDiv.id = 'pyodide-status';
-        statusDiv.style.position = 'fixed';
-        statusDiv.style.bottom = '10px';
-        statusDiv.style.left = '10px';
-        statusDiv.style.padding = '5px 10px';
-        statusDiv.style.backgroundColor = 'var(--color-surface)';
-        statusDiv.style.border = '1px solid var(--color-border)';
-        statusDiv.style.borderRadius = '6px';
-        statusDiv.style.fontSize = '12px';
-        statusDiv.style.zIndex = '1000';
-        statusDiv.style.opacity = '0';
-        statusDiv.style.transition = 'opacity 0.5s';
-        document.body.appendChild(statusDiv);
-    }
-
-    function showStatus(message, fadeOut = false) {
-        const statusDiv = document.getElementById('pyodide-status');
-        if (statusDiv) {
-            statusDiv.textContent = message;
-            statusDiv.style.opacity = '1';
-            if (fadeOut) {
-                setTimeout(() => { statusDiv.style.opacity = '0'; }, 3000);
+        
+        if (frameKey === 'data_editor') {
+            if (dataManager.isInitialized) {
+                renderDataEditorTabs();
+                renderDataList(currentDataType);
+            } else {
+                const tabContainer = document.getElementById('data-editor-tabs');
+                const listContainer = document.getElementById('data-list-container');
+                tabContainer.innerHTML = '';
+                listContainer.innerHTML = '<p class="placeholder-text">「データフォルダを選択」ボタンからデータを読み込んでください。</p>';
             }
         }
     }
 
-    const GAME_DATA = {
-        ECHO_DATA: { "main_stats": { "4": [{ "name": "HP%", "value": 33, "key": "hp_percent" }, { "name": "攻撃力%", "value": 33, "key": "atk_percent" }, { "name": "防御力%", "value": 41.5, "key": "def_percent" }, { "name": "クリティカル率", "value": 22, "key": "crit_rate" }, { "name": "クリティカルダメージ", "value": 44, "key": "crit_damage" }, { "name": "治療効果アップ", "value": 26.4, "key": "heal_bonus" }], "3": [{ "name": "気動ダメージアップ", "value": 30, "key": "aero_dmg_up" }, { "name": "焦熱ダメージアップ", "value": 30, "key": "fusion_dmg_up" }, { "name": "電導ダメージアップ", "value": 30, "key": "electro_dmg_up" }, { "name": "凝縮ダメージアップ", "value": 30, "key": "glacio_dmg_up" }, { "name": "消滅ダメージアップ", "value": 30, "key": "havoc_dmg_up" }, { "name": "回折ダメージアップ", "value": 30, "key": "spectro_dmg_up" }, { "name": "共鳴効率", "value": 32, "key": "resonance_efficiency" }, { "name": "攻撃力%", "value": 30, "key": "atk_percent" }, { "name": "HP%", "value": 30, "key": "hp_percent" }, { "name": "防御力%", "value": 38, "key": "def_percent" }], "1": [{ "name": "HP%", "value": 22.8, "key": "hp_percent" }, { "name": "攻撃力%", "value": 18, "key": "atk_percent" }, { "name": "防御力%", "value": 18, "key": "def_percent" }] }, "fixed_main_stats": { "4": { "name": "攻撃力(数値)", "value": 150, "key": "atk_flat" }, "3": { "name": "攻撃力(数値)", "value": 100, "key": "atk_flat" }, "1": { "name": "HP(数値)", "value": 1520, "key": "hp_flat" } }, "sub_stat_values": { "HP%": { "key": "hp_percent", "values": [6.4, 7.1, 7.9, 8.6, 9.4, 10.1, 10.9, 11.6] }, "攻撃力%": { "key": "atk_percent", "values": [6.4, 7.1, 7.9, 8.6, 9.4, 10.1, 10.9, 11.6] }, "防御力%": { "key": "def_percent", "values": [8.1, 9, 10, 10.9, 11.8, 12.8, 13.6, 14.7] }, "クリティカル率": { "key": "crit_rate", "values": [6.3, 6.9, 7.5, 8.1, 8.7, 9.3, 9.9, 10.5] }, "クリティカルダメージ": { "key": "crit_damage", "values": [12.6, 13.8, 15, 16.2, 17.4, 18.6, 19.8, 21] }, "HP(数値)": { "key": "hp_flat", "values": [320, 360, 390, 430, 470, 510, 540, 580] }, "攻撃力(数値)": { "key": "atk_flat", "values": [30, 30, 40, 40, 50, 50, 60, 60] }, "防御力(数値)": { "key": "def_flat", "values": [40, 40, 50, 50, 60, 60, 70, 70] }, "共鳴効率": { "key": "resonance_efficiency", "values": [6.8, 7.6, 8.4, 9.2, 10, 10.8, 11.6, 12.4] }, "通常攻撃ダメージアップ": { "key": "normal_attack_dmg_up", "values": [6.4, 7.1, 7.9, 8.6, 9.4, 10.1, 10.9, 11.6] }, "重撃ダメージアップ": { "key": "heavy_attack_dmg_up", "values": [6.4, 7.1, 7.9, 8.6, 9.4, 10.1, 10.9, 11.6] }, "共鳴スキルダメージアップ": { "key": "resonance_skill_dmg_up", "values": [6.4, 7.1, 7.9, 8.6, 9.4, 10.1, 10.9, 11.6] }, "共鳴解放ダメージアップ": { "key": "resonance_liberation_dmg_up", "values": [6.4, 7.1, 7.9, 8.6, 9.4, 10.1, 10.9, 11.6] } } },
-        ECHO_SUB_STAT_TYPES: ["HP%", "攻撃力%", "防御力%", "クリティカル率", "クリティカルダメージ", "HP(数値)", "攻撃力(数値)", "防御力(数値)", "共鳴効率", "通常攻撃ダメージアップ", "重撃ダメージアップ", "共鳴スキルダメージアップ", "共鳴解放ダメージアップ"],
-        ABNORMAL_EFFECTS: ["騒光効果", "風蝕効果", "斉爆効果", "虚滅効果"]
-    };
-
-    // --- Rotation Editor Logic ---
-    let appState = {
-        team_builds: [], // ここにキャラクター準備画面で選択したビルドが入る
-        rotation_initial: [],
-        rotation_loop: [],
-        currentRotationView: 'initial'
-    };
-
-    async function recalculateAndRender() {
-        if (!pyodide || !recalculateHelper || !dataManager.isInitialized) return;
-
-        // ▼▼▼ ここからが修正点 ▼▼▼
-
-        // 1. appStateからチームのキャラクター名リストを取得
-        const teamCharacterNames = appState.team_builds.map(b => b.character_name);
-        if (teamCharacterNames.length === 0) {
-            console.warn("recalculateAndRender: No characters in team_builds.");
-            return; // チームに誰もいなければ計算しない
-        }
-
-        // 2. dataManagerから最新の完全なビルド情報を再構築
-        //    これにより、Pythonが必要とする `character_data` などが必ず含まれるようになる
-        const fullTeamBuilds = appState.team_builds.map(build => {
-            const charData = dataManager.getData('characters', {})[build.character_name] || {};
-            const weaponData = dataManager.getData('weapons', {})[build.weapon_name] || {};
-            const harmony1Data = dataManager.getData('harmony_effects', {})[build.harmony1_name] || {};
-            const harmony2Data = dataManager.getData('harmony_effects', {})[build.harmony2_name] || {};
-            const echoSkillData = dataManager.getData('echo_skills', {})[build.echo_skill_name] || {};
-
-            // 元のビルド情報に、最新のデータオブジェクトをマージする
-            return {
-                ...build,
-                character_data: charData,
-                weapon_data: weaponData,
-                harmony1_data: harmony1Data,
-                harmony2_data: harmony2Data,
-                echo_skill_data: echoSkillData
-            };
-        });
-
-        // 3. 再構築した完全なビルド情報をPythonに渡す
-        const resultProxy = recalculateHelper.recalculate_rotation_state(
-            pyodide.toPy(fullTeamBuilds), // ここを修正
-            pyodide.toPy(appState.rotation_initial),
-            pyodide.toPy(appState.rotation_loop),
-            pyodide.toPy(dataManager.data)
-        );
-        // ▲▲▲ ここまで ▲▲▲
-
-        const newRotations = resultProxy.toJs({ dict_converter: Object.fromEntries });
-        resultProxy.destroy();
-
-        appState.rotation_initial = newRotations.initial || [];
-        appState.rotation_loop = newRotations.loop || [];
-
-        renderRotationList();
-    }
-
-    /**
-     * キャラクター準備画面から渡されたデータでスキルセレクターを構築する
-     */
-    function setupRotationEditor() {
-        const selectorPanel = document.getElementById('skill-selector-panel');
-        selectorPanel.innerHTML = ''; // クリア
-
-        // キャラクター準備画面で設定されたビルド情報を使用
-        appState.team_builds.forEach(build => {
-            const charName = build.character_name;
-            const charData = build.character_data;
-
-            const column = document.createElement('div');
-            column.className = 'skill-column';
-
-            const header = document.createElement('div');
-            header.className = 'skill-column-header';
-            header.textContent = charName;
-            column.appendChild(header);
-
-            // スキルリストを取得 (キャラクターデータ、凸、武器などから収集する必要がある)
-            // ここでは簡略化してキャラクターの基本スキルのみ表示
-            (charData.skills || []).forEach(skill => {
-                const button = document.createElement('button');
-                button.className = 'skill-button';
-                button.textContent = skill.name;
-                button.addEventListener('click', () => addAction(charName, skill));
-                column.appendChild(button);
-            });
-            selectorPanel.appendChild(column);
-        });
-
-        // 既存のローテーションも再描画
-        renderRotationList();
-    }
-
-    /**
-     * ローテーションリストにアクションを追加する
-     */
-    function addAction(charName, skill) {
-        const action = {
-            character: charName,
-            skill: skill.name,
-            skill_data: skill, // スキルデータ全体を渡す
+    // --- データ管理画面 (Data Editor) ロジック ---
+    function renderDataEditorTabs() {
+        const tabContainer = document.getElementById('data-editor-tabs');
+        tabContainer.innerHTML = '';
+        const dataTypesJp = {
+            "characters": "キャラクター", "weapons": "武器", "harmony_effects": "ハーモニー",
+            "echo_skills": "音骸スキル", "builds": "ビルド", "scenarios": "シナリオ", "stage_effects": "ステージ効果"
         };
-        if (appState.currentRotationView === 'initial') {
-            appState.rotation_initial.push(action);
-        } else {
-            appState.rotation_loop.push(action);
-        }
-        recalculateAndRender();
+
+        dataManager.dataKeys.forEach(key => {
+            const button = document.createElement('button');
+            button.className = 'tab-button';
+            button.dataset.type = key;
+            button.textContent = dataTypesJp[key] || key;
+            if (key === currentDataType) {
+                button.classList.add('active');
+            }
+            tabContainer.appendChild(button);
+        });
     }
 
-    /**
-     * 現在のローテーションリストを画面に描画する
-     */
-    function renderRotationList() {
-        const listId = appState.currentRotationView === 'initial' ? 'initial-rotation-list' : 'loop-rotation-list';
-        const listContainer = document.getElementById(listId);
-        const rotationData = appState[appState.currentRotationView === 'initial' ? 'rotation_initial' : 'rotation_loop'];
+    function renderDataList(dataType) {
+        const listContainer = document.getElementById('data-list-container');
         listContainer.innerHTML = '';
+        const data = dataManager.getData(dataType, {});
 
-        (rotationData || []).forEach((action, index) => {
+        for (const itemName in data) {
             const row = document.createElement('div');
-            row.className = 'action-row';
-
-            const concertoTotal = action.concerto_energy_total || 0;
-            const resonanceGain = action.resonance_energy_gain || 0;
-            const resonanceTotal = action.resonance_energy_total || 0;
-            const activeBuffs = action.active_buffs ? Object.keys(action.active_buffs).length : 0;
-
+            row.className = 'data-item-row';
             row.innerHTML = `
-                <div class="action-row-top">
-                    <div class="action-char-icon"></div>
-                    <span class="action-name">${action.character}: ${action.skill}</span>
-                    <button class="action-delete-btn" data-index="${index}">🗑️</button>
-                </div>
-                <div class="action-row-bottom">
-                    <div class="energy-display"><span class="energy-label">協奏 E</span><span class="energy-value">${concertoTotal.toFixed(1)}</span></div>
-                    <div class="energy-display"><span class="energy-label">共鳴 E (+${resonanceGain.toFixed(1)})</span><span class="energy-value">${resonanceTotal.toFixed(1)}</span></div>
-                    <div class="buff-list">${[...Array(activeBuffs)].map(() => `<div class="buff-icon"></div>`).join('')}</div>
+                <span class="data-item-name">${itemName}</span>
+                <div class="data-item-actions">
+                    <button data-action="edit" data-key="${dataType}" data-name="${itemName}" title="編集">✏️</button>
+                    <button data-action="delete" data-key="${dataType}" data-name="${itemName}" title="削除">🗑️</button>
                 </div>
             `;
             listContainer.appendChild(row);
-        });
-    }
-
-    function showFrame(frameKey) {
-        document.querySelectorAll('.content-frame').forEach(f => f.classList.remove('visible'));
-        document.querySelectorAll('.nav-button').forEach(b => b.classList.remove('active'));
-        document.getElementById(`frame-${frameKey}`).classList.add('visible');
-        document.getElementById(`btn-${frameKey}`).classList.add('active');
-    }
-
-    function createEchoInputWidget(panelIndex) {
-        for (let j = 0; j < 5; j++) {
-            const costVal = document.getElementById(`echo-cost-${panelIndex}-${j}`).value;
-            const mainStatMenu = document.getElementById(`echo-main-stat-${panelIndex}-${j}`);
-            const currentMainStat = mainStatMenu.value;
-            const mainStatOptions = GAME_DATA.ECHO_DATA.main_stats[costVal] || [];
-            mainStatMenu.innerHTML = mainStatOptions.map(s => `<option value="${s.name}">${s.name}</option>`).join('');
-            if (mainStatOptions.some(s => s.name === currentMainStat)) {
-                mainStatMenu.value = currentMainStat;
-            } else if (mainStatOptions.length > 0) {
-                mainStatMenu.value = mainStatOptions[0].name;
-            }
-
-            const fixedStatLabel = document.getElementById(`echo-fixed-stat-${panelIndex}-${j}`);
-            const fixedStat = GAME_DATA.ECHO_DATA.fixed_main_stats[costVal];
-            fixedStatLabel.textContent = fixedStat ? `固定: ${fixedStat.name} +${fixedStat.value}` : '';
-
-            for (let k = 0; k < 5; k++) {
-                const typeMenu = document.getElementById(`echo-sub-type-${panelIndex}-${j}-${k}`);
-                const valueMenu = document.getElementById(`echo-sub-value-${panelIndex}-${j}-${k}`);
-                const currentSubType = typeMenu.value;
-                const subValueOptions = GAME_DATA.ECHO_DATA.sub_stat_values[currentSubType]?.values || [];
-                const currentValue = valueMenu.value;
-                valueMenu.innerHTML = subValueOptions.map(v => `<option value="${v}">${v}</option>`).join('');
-                if (subValueOptions.includes(parseFloat(currentValue))) {
-                    valueMenu.value = currentValue;
-                }
-            }
         }
-        updatePanelStats(panelIndex);
     }
 
+    // --- キャラクター準備画面 (Character Setup) ロジック ---
     function createCharacterPanels() {
         const container = document.querySelector('.team-container');
         if (!container) return;
@@ -828,41 +702,47 @@ async def generate_graph(results, theme_colors):
 
             createEchoInputWidget(i);
         }
+    }
+    
+    function createEchoInputWidget(panelIndex) {
+        for (let j = 0; j < 5; j++) {
+            const costVal = document.getElementById(`echo-cost-${panelIndex}-${j}`).value;
+            const mainStatMenu = document.getElementById(`echo-main-stat-${panelIndex}-${j}`);
+            const currentMainStat = mainStatMenu.value;
+            const mainStatOptions = GAME_DATA.ECHO_DATA.main_stats[costVal] || [];
+            mainStatMenu.innerHTML = mainStatOptions.map(s => `<option value="${s.name}">${s.name}</option>`).join('');
+            if (mainStatOptions.some(s => s.name === currentMainStat)) {
+                mainStatMenu.value = currentMainStat;
+            } else if (mainStatOptions.length > 0) {
+                mainStatMenu.value = mainStatOptions[0].name;
+            }
 
-        document.querySelectorAll('.character-panel select, .character-panel input').forEach(el => {
-            el.addEventListener('change', (e) => {
-                const panel = e.target.closest('.character-panel');
-                if (panel) {
-                    const panelIndex = parseInt(panel.dataset.panelIndex, 10);
-                    createEchoInputWidget(panelIndex);
+            const fixedStatLabel = document.getElementById(`echo-fixed-stat-${panelIndex}-${j}`);
+            const fixedStat = GAME_DATA.ECHO_DATA.fixed_main_stats[costVal];
+            fixedStatLabel.textContent = fixedStat ? `固定: ${fixedStat.name} +${fixedStat.value}` : '';
+
+            for (let k = 0; k < 5; k++) {
+                const typeMenu = document.getElementById(`echo-sub-type-${panelIndex}-${j}-${k}`);
+                const valueMenu = document.getElementById(`echo-sub-value-${panelIndex}-${j}-${k}`);
+                const currentSubType = typeMenu.value;
+                const subValueOptions = GAME_DATA.ECHO_DATA.sub_stat_values[currentSubType]?.values || [];
+                const currentValue = valueMenu.value;
+                valueMenu.innerHTML = subValueOptions.map(v => `<option value="${v}">${v}</option>`).join('');
+                if (subValueOptions.includes(parseFloat(currentValue))) {
+                    valueMenu.value = currentValue;
                 }
-            });
-        });
+            }
+        }
+        updatePanelStats(panelIndex);
     }
-
-    function initializeUI() {
-        const abnormalContainer = document.querySelector('.abnormal-effects');
-        if (!abnormalContainer) return;
-        abnormalContainer.innerHTML = abnormalContainer.firstElementChild.outerHTML;
-        GAME_DATA.ABNORMAL_EFFECTS.forEach(effect => {
-            const label = document.createElement('label');
-            label.innerHTML = `<input type="checkbox" checked> ${effect}`;
-            abnormalContainer.appendChild(label);
-        });
-    }
-
-    // ▼▼▼ 変更点: この関数を全面的に刷新 ▼▼▼
+    
     async function updateUIWithOptions() {
-        // ユーザー名を設定
         const usernameInput = document.getElementById('username');
         usernameInput.value = dataManager.config.username || '';
         usernameInput.addEventListener('input', (e) => {
             dataManager.config.username = e.target.value;
-            // config.jsonの保存は、ここでは簡略化のため省略。
-            // 本格的には debounce などを使い、入力完了後に保存処理を呼ぶのが望ましい。
         });
 
-        // 全パネルのドロップダウンを更新
         document.querySelectorAll('.character-panel').forEach(panel => {
             const harmonies = Object.keys(dataManager.getData('harmony_effects', {}));
             const echoSkills = Object.keys(dataManager.getData('echo_skills', {}));
@@ -878,8 +758,6 @@ async def generate_graph(results, theme_colors):
         });
     }
 
-    // ▼▼▼ 変更点: この関数を全面的に刷新 ▼▼▼
-    // script.js の onCharacterSelect 関数を置き換え
     async function onCharacterSelect(panelIndex) {
         const charactersWithOptions = Object.values(dataManager.getData('characters', {}))
             .map(c => ({ name: c.name, yomigana: c.yomigana || '', attribute: c.attribute }));
@@ -890,7 +768,6 @@ async def generate_graph(results, theme_colors):
             const panel = document.querySelector(`.character-panel[data-panel-index="${panelIndex}"]`);
             panel.querySelector('[data-type="character"]').textContent = selectedCharName;
 
-            // ▼▼▼ ここからが修正点 ▼▼▼
             const charData = dataManager.getData('characters', {})[selectedCharName];
             const charImageEl = panel.querySelector('.char-image');
             if (charData && charData.image_file) {
@@ -899,7 +776,6 @@ async def generate_graph(results, theme_colors):
             } else {
                 charImageEl.style.backgroundImage = 'none';
             }
-            // ▲▲▲ ここまで ▲▲▲
 
             const weaponButton = panel.querySelector('[data-type="weapon"]');
             weaponButton.disabled = false;
@@ -914,8 +790,6 @@ async def generate_graph(results, theme_colors):
         }
     }
 
-    // 武器選択ボタンのクリックハンドラ
-    // script.js の onWeaponSelect 関数を置き換え
     async function onWeaponSelect(panelIndex) {
         const panel = document.querySelector(`.character-panel[data-panel-index="${panelIndex}"]`);
         const charName = panel.querySelector('[data-type="character"]').textContent;
@@ -927,42 +801,33 @@ async def generate_graph(results, theme_colors):
         const weaponType = charData.weapon_type;
         const weapons = Object.values(dataManager.getData('weapons', {}))
             .filter(w => w.weapon_type === weaponType)
-            .map(w => ({ name: w.name })); // ポップアップはオブジェクトの配列も受け付ける
+            .map(w => ({ name: w.name }));
 
         const selectedWeapon = await searchablePopup.open(`${weaponType} を選択`, weapons);
         if (selectedWeapon) {
             panel.querySelector('[data-type="weapon"]').textContent = selectedWeapon;
 
-            // ▼▼▼ ここからが修正点 ▼▼▼
             const weaponData = dataManager.getData('weapons', {})[selectedWeapon];
-            const weaponImageEl = panel.querySelector('.item-images .item-image:nth-child(1)'); // 1番目のitem-imageを選択
+            const weaponImageEl = panel.querySelector('.item-images .item-image:nth-child(1)');
             if (weaponData && weaponData.image_file) {
                 weaponImageEl.style.backgroundImage = `url(images/weapons/${weaponData.image_file})`;
                 weaponImageEl.style.backgroundSize = 'cover';
             } else {
                 weaponImageEl.style.backgroundImage = 'none';
             }
-            // ▲▲▲ ここまで ▲▲▲
-
             updatePanelStats(panelIndex);
         }
     }
 
-    // ▼▼▼ 変更点: ビルド読込/保存のための新関数を追加 ▼▼▼
-    // script.js の loadBuildToPanel 関数を、これで置き換え
-    // script.js の loadBuildToPanel 関数を置き換え
     function loadBuildToPanel(panelIndex, buildName) {
         if (!buildName) return;
         const buildData = dataManager.getData('builds', {})[buildName];
         if (!buildData) return;
 
         const panel = document.querySelector(`.character-panel[data-panel-index="${panelIndex}"]`);
-
-        // ▼▼▼ ここからが修正点 ▼▼▼
         const charData = dataManager.getData('characters', {})[buildData.character_name];
         const weaponData = dataManager.getData('weapons', {})[buildData.weapon_name];
 
-        // キャラクター画像を設定
         const charImageEl = panel.querySelector('.char-image');
         if (charData && charData.image_file) {
             charImageEl.style.backgroundImage = `url(images/characters/${charData.image_file})`;
@@ -971,7 +836,6 @@ async def generate_graph(results, theme_colors):
             charImageEl.style.backgroundImage = 'none';
         }
 
-        // 武器画像を設定
         const weaponImageEl = panel.querySelector('.item-images .item-image:nth-child(1)');
         if (weaponData && weaponData.image_file) {
             weaponImageEl.style.backgroundImage = `url(images/weapons/${weaponData.image_file})`;
@@ -980,11 +844,7 @@ async def generate_graph(results, theme_colors):
             weaponImageEl.style.backgroundImage = 'none';
         }
 
-        // キャラクター名を設定
         panel.querySelector('[data-type="character"]').textContent = buildData.character_name || 'キャラクターを選択';
-        // ▲▲▲ ここまで ▲▲▲
-
-        // 基本情報の設定
         panel.querySelector('[data-type="weapon"]').textContent = buildData.weapon_name || '武器を選択';
         panel.querySelector('[data-type="constellation"]').value = buildData.constellation ?? 0;
         panel.querySelector('[data-type="rank"]').value = buildData.weapon_rank ?? 1;
@@ -992,29 +852,23 @@ async def generate_graph(results, theme_colors):
         panel.querySelector('[data-type="harmony2"]').value = buildData.harmony2_name || '';
         panel.querySelector('[data-type="echo_skill"]').value = buildData.echo_skill_name || '';
 
-        // ▼▼▼ ここからが新しい、完全な音骸読み込みロジック ▼▼▼
         const echoList = buildData.echo_list || [];
         for (let i = 0; i < 5; i++) {
-            const echoData = echoList[i]; // i番目の音骸データを取得
+            const echoData = echoList[i];
 
             if (echoData) {
-                // コストを設定
                 const costSelect = document.getElementById(`echo-cost-${panelIndex}-${i}`);
                 costSelect.value = echoData.cost;
 
-                // メインステータスを設定
-                // まずコストに基づいてメインステの選択肢を更新
                 const mainStatMenu = document.getElementById(`echo-main-stat-${panelIndex}-${i}`);
                 const mainStatOptions = GAME_DATA.ECHO_DATA.main_stats[echoData.cost] || [];
                 mainStatMenu.innerHTML = mainStatOptions.map(s => `<option value="${s.name}">${s.name}</option>`).join('');
                 mainStatMenu.value = echoData.main_stat?.name || '';
 
-                // 固定メインステータスを更新
                 const fixedStatLabel = document.getElementById(`echo-fixed-stat-${panelIndex}-${i}`);
                 const fixedStat = GAME_DATA.ECHO_DATA.fixed_main_stats[echoData.cost];
                 fixedStatLabel.textContent = fixedStat ? `固定: ${fixedStat.name} +${fixedStat.value}` : '';
 
-                // サブステータスを設定
                 const subStats = echoData.sub_stats || [];
                 for (let k = 0; k < 5; k++) {
                     const subStatData = subStats[k];
@@ -1023,86 +877,33 @@ async def generate_graph(results, theme_colors):
 
                     if (subStatData) {
                         typeMenu.value = subStatData.name || '';
-
-                        // サブステの種類に基づいて数値の選択肢を更新
                         const subValueOptions = GAME_DATA.ECHO_DATA.sub_stat_values[subStatData.name]?.values || [];
                         valueMenu.innerHTML = subValueOptions.map(v => `<option value="${v}">${v}</option>`).join('');
                         valueMenu.value = subStatData.value || '';
                     } else {
-                        // データがない場合は空にする
                         typeMenu.value = '';
                         valueMenu.innerHTML = '';
                     }
                 }
             } else {
-                // 音骸データ自体がない場合は、ウィジェットを空にする
-                document.getElementById(`echo-cost-${panelIndex}-${i}`).value = '4'; // デフォルトに戻すなど
-                // (必要に応じて他のフィールドもリセット)
+                document.getElementById(`echo-cost-${panelIndex}-${i}`).value = '4';
             }
         }
-        // ▲▲▲ ここまで ▲▲▲
-
-        // 最後に全体のステータスを再計算
         updatePanelStats(panelIndex);
     }
 
     async function saveBuildFromPanel(panelIndex) {
-        const overlay = document.getElementById('save-build-overlay');
-        const input = document.getElementById('save-build-input');
-        const confirmBtn = document.getElementById('save-build-confirm-btn');
-        const cancelBtn = document.getElementById('save-build-cancel-btn');
-
-        input.value = '';
-        overlay.classList.add('visible');
-        input.focus();
-
-        const getBuildName = new Promise((resolve) => {
-            const onConfirm = () => {
-                cleanup();
-                resolve(input.value);
-            };
-
-            const onCancel = () => {
-                cleanup();
-                resolve(null);
-            };
-
-            const onKeyup = (e) => {
-                if (e.key === 'Enter') onConfirm();
-            };
-
-            const cleanup = () => {
-                overlay.classList.remove('visible');
-                confirmBtn.removeEventListener('click', onConfirm);
-                cancelBtn.removeEventListener('click', onCancel);
-                overlay.removeEventListener('click', onOverlayClick);
-                input.removeEventListener('keyup', onKeyup);
-            };
-
-            const onOverlayClick = (e) => {
-                if (e.target === overlay) onCancel();
-            };
-
-            confirmBtn.addEventListener('click', onConfirm);
-            cancelBtn.addEventListener('click', onCancel);
-            overlay.addEventListener('click', onOverlayClick);
-            input.addEventListener('keyup', onKeyup);
-        });
-        const buildName = await getBuildName;
+        const buildName = await customModals.prompt("ビルドを保存", "ビルド名を入力してください:");
 
         if (!buildName) return;
 
         const allBuilds = dataManager.getData('builds', {});
         if (allBuilds[buildName]) {
-            // ▼▼▼ confirm をカスタムモーダルに置き換え ▼▼▼
             const overwrite = await customModals.confirm(
                 "上書き確認",
                 `ビルド名'${buildName}'は既に存在します。上書きしますか？`
             );
-            if (!overwrite) {
-                return;
-            }
-            // ▲▲▲ ここまで ▲▲▲
+            if (!overwrite) return;
         }
 
         const currentBuild = getBuildFromPanel(panelIndex);
@@ -1123,9 +924,7 @@ async def generate_graph(results, theme_colors):
         const success = await dataManager.saveData('builds', allBuilds);
 
         if (success) {
-            // ▼▼▼ alert をカスタムモーダルに置き換え ▼▼▼
             await customModals.alert("成功", `ビルド'${buildName}'を保存しました。`);
-            // ▲▲▲ ここまで ▲▲▲
             const panel = document.querySelector(`.character-panel[data-panel-index="${panelIndex}"]`);
             const buildSelect = panel.querySelector('[data-type="build"]');
             const charBuilds = Object.keys(allBuilds).filter(bName => allBuilds[bName].character_name === currentBuild.character_name);
@@ -1136,26 +935,21 @@ async def generate_graph(results, theme_colors):
         }
     }
 
-
-    // パネルの入力からビルドデータを取得する（データマネージャーのデータを使用）
     function getBuildFromPanel(panelIndex) {
         const panel = document.querySelector(`.character-panel[data-panel-index="${panelIndex}"]`);
         if (!panel) return null;
 
         const charName = panel.querySelector('[data-type="character"]').textContent;
-        // キャラクターが選択されていなければnullを返す
         if (!charName || charName === 'キャラクターを選択') {
             return null;
         }
 
         const weaponName = panel.querySelector('[data-type="weapon"]').textContent;
-
         const charData = dataManager.getData('characters', {})[charName] || {};
         const weaponData = dataManager.getData('weapons', {})[weaponName] || {};
         const harmony1Name = panel.querySelector('[data-type="harmony1"]').value;
         const harmony2Name = panel.querySelector('[data-type="harmony2"]').value;
         const echoSkillName = panel.querySelector('[data-type="echo_skill"]').value;
-
         const harmony1Data = dataManager.getData('harmony_effects', {})[harmony1Name] || {};
         const harmony2Data = dataManager.getData('harmony_effects', {})[harmony2Name] || {};
         const echoSkillData = dataManager.getData('echo_skills', {})[echoSkillName] || {};
@@ -1164,8 +958,6 @@ async def generate_graph(results, theme_colors):
         for (let j = 0; j < 5; j++) {
             const cost = document.getElementById(`echo-cost-${panelIndex}-${j}`).value;
             const mainStatName = document.getElementById(`echo-main-stat-${panelIndex}-${j}`).value;
-
-            // mainStatInfoを正しく取得
             const mainStatInfo = GAME_DATA.ECHO_DATA.main_stats[cost]?.find(s => s.name === mainStatName) || null;
 
             const subStats = [];
@@ -1177,9 +969,8 @@ async def generate_graph(results, theme_colors):
                     subStats.push({ name: type, value: parseFloat(value), key: key });
                 }
             }
-            // データが不完全でも、空の音骸として形を保つ
             echoList.push({
-                name: "", // nameキーを追加
+                name: "",
                 cost: parseInt(cost),
                 main_stat: mainStatInfo,
                 sub_stats: subStats
@@ -1187,7 +978,6 @@ async def generate_graph(results, theme_colors):
         }
 
         return {
-            // _data サフィックス付きの完全なデータ
             character_name: charName,
             character_data: charData,
             weapon_name: weaponName,
@@ -1207,16 +997,12 @@ async def generate_graph(results, theme_colors):
     async function updatePanelStats(panelIndex) {
         if (!pyodide || !calculatorModule) return;
         const statusDisplay = document.getElementById(`status-display-${panelIndex}`);
-
-        // ▼▼▼ ここからが修正点 ▼▼▼
         const buildData = getBuildFromPanel(panelIndex);
 
-        // ビルドデータがnull（キャラクター未選択など）の場合は、表示をクリアして終了
         if (!buildData) {
             statusDisplay.value = "キャラクターを選択してください...";
             return;
         }
-        // ▲▲▲ ここまで ▲▲▲
 
         try {
             const buildProxy = pyodide.toPy(buildData);
@@ -1240,8 +1026,123 @@ async def generate_graph(results, theme_colors):
             console.error(error);
         }
     }
+    
+    // --- ローテーション画面 (Rotation Editor) ロジック ---
+    function setupRotationEditor() {
+        const selectorPanel = document.getElementById('skill-selector-panel');
+        selectorPanel.innerHTML = '';
 
-    // --- 計算実行と結果表示 ---
+        appState.team_builds.forEach(build => {
+            const charName = build.character_name;
+            const charData = build.character_data;
+
+            const column = document.createElement('div');
+            column.className = 'skill-column';
+
+            const header = document.createElement('div');
+            header.className = 'skill-column-header';
+            header.textContent = charName;
+            column.appendChild(header);
+
+            (charData.skills || []).forEach(skill => {
+                const button = document.createElement('button');
+                button.className = 'skill-button';
+                button.textContent = skill.name;
+                button.addEventListener('click', () => addAction(charName, skill));
+                column.appendChild(button);
+            });
+            selectorPanel.appendChild(column);
+        });
+        renderRotationList();
+    }
+    
+    function addAction(charName, skill) {
+        const action = {
+            character: charName,
+            skill: skill.name,
+            skill_data: skill,
+        };
+        if (appState.currentRotationView === 'initial') {
+            appState.rotation_initial.push(action);
+        } else {
+            appState.rotation_loop.push(action);
+        }
+        recalculateAndRender();
+    }
+
+    function renderRotationList() {
+        const listId = appState.currentRotationView === 'initial' ? 'initial-rotation-list' : 'loop-rotation-list';
+        const listContainer = document.getElementById(listId);
+        const rotationData = appState[appState.currentRotationView === 'initial' ? 'rotation_initial' : 'rotation_loop'];
+        listContainer.innerHTML = '';
+
+        (rotationData || []).forEach((action, index) => {
+            const row = document.createElement('div');
+            row.className = 'action-row';
+
+            const concertoTotal = action.concerto_energy_total || 0;
+            const resonanceGain = action.resonance_energy_gain || 0;
+            const resonanceTotal = action.resonance_energy_total || 0;
+            const activeBuffs = action.active_buffs ? Object.keys(action.active_buffs).length : 0;
+
+            row.innerHTML = `
+                <div class="action-row-top">
+                    <div class="action-char-icon"></div>
+                    <span class="action-name">${action.character}: ${action.skill}</span>
+                    <button class="action-delete-btn" data-index="${index}">🗑️</button>
+                </div>
+                <div class="action-row-bottom">
+                    <div class="energy-display"><span class="energy-label">協奏 E</span><span class="energy-value">${concertoTotal.toFixed(1)}</span></div>
+                    <div class="energy-display"><span class="energy-label">共鳴 E (+${resonanceGain.toFixed(1)})</span><span class="energy-value">${resonanceTotal.toFixed(1)}</span></div>
+                    <div class="buff-list">${[...Array(activeBuffs)].map(() => `<div class="buff-icon"></div>`).join('')}</div>
+                </div>
+            `;
+            listContainer.appendChild(row);
+        });
+    }
+
+    async function recalculateAndRender() {
+        if (!pyodide || !recalculateHelper || !dataManager.isInitialized) return;
+
+        const teamCharacterNames = appState.team_builds.map(b => b.character_name);
+        if (teamCharacterNames.length === 0) {
+            console.warn("recalculateAndRender: No characters in team_builds.");
+            return;
+        }
+
+        const fullTeamBuilds = appState.team_builds.map(build => {
+            const charData = dataManager.getData('characters', {})[build.character_name] || {};
+            const weaponData = dataManager.getData('weapons', {})[build.weapon_name] || {};
+            const harmony1Data = dataManager.getData('harmony_effects', {})[build.harmony1_name] || {};
+            const harmony2Data = dataManager.getData('harmony_effects', {})[build.harmony2_name] || {};
+            const echoSkillData = dataManager.getData('echo_skills', {})[build.echo_skill_name] || {};
+
+            return {
+                ...build,
+                character_data: charData,
+                weapon_data: weaponData,
+                harmony1_data: harmony1Data,
+                harmony2_data: harmony2Data,
+                echo_skill_data: echoSkillData
+            };
+        });
+
+        const resultProxy = recalculateHelper.recalculate_rotation_state(
+            pyodide.toPy(fullTeamBuilds),
+            pyodide.toPy(appState.rotation_initial),
+            pyodide.toPy(appState.rotation_loop),
+            pyodide.toPy(dataManager.data)
+        );
+        const newRotations = resultProxy.toJs({ dict_converter: Object.fromEntries });
+        resultProxy.destroy();
+
+        appState.rotation_initial = newRotations.initial || [];
+        appState.rotation_loop = newRotations.loop || [];
+
+        renderRotationList();
+    }
+
+    // --- 計算結果画面 (Output View) ロジック ---
     async function runCalculationAndShowResults() {
         if (!pyodide || !calculatorModule) {
             alert("計算モジュールが初期化されていません。");
@@ -1249,30 +1150,26 @@ async def generate_graph(results, theme_colors):
         }
         showStatus("最終ダメージ計算を実行中...");
 
-        // 1. Pythonの process_rotation を呼び出す
         const resultProxy = calculatorModule.process_rotation(
             pyodide.toPy(appState.team_builds),
             pyodide.toPy(appState.rotation_initial),
             pyodide.toPy(appState.rotation_loop),
-            pyodide.toPy({ level: 90 }), // 仮の敵情報
-            pyodide.toPy({}), // 仮のバフデータ
-            "", // stage_effects_name
-            null, // data_manager (Python側では使わない想定)
-            pyodide.toPy([]), // time_marks_initial
-            pyodide.toPy([])  // time_marks_loop
+            pyodide.toPy({ level: 90 }),
+            pyodide.toPy({}),
+            "",
+            null,
+            pyodide.toPy([]),
+            pyodide.toPy([])
         );
         const results = resultProxy.toJs({ dict_converter: Object.fromEntries });
         resultProxy.destroy();
 
-        // 2. 結果をUIに表示 (await を追加)
         await renderOutputView(results);
-
         showStatus("計算完了！", true);
         showFrame('output_view');
     }
 
     async function renderOutputView(results) {
-        // results はプレーンなJSオブジェクトなので、ドットでアクセスする
         const initial_phase = results.initial_phase;
         const loop_phase = results.loop_phase;
 
@@ -1286,7 +1183,6 @@ async def generate_graph(results, theme_colors):
         const loopDamage = loop_phase.total_damage;
         const initialLog = initial_phase.log;
 
-        // サマリータブ
         const summaryContainer = document.getElementById('tab-content-summary');
         summaryContainer.innerHTML = `
             <h3>計算サマリー</h3>
@@ -1295,7 +1191,6 @@ async def generate_graph(results, theme_colors):
             <p>合計 (初動 + 5ループ): ${(initialDamage + loopDamage * 5).toLocaleString('ja-JP', { maximumFractionDigits: 0 })}</p>
         `;
 
-        // グラフタブ
         const graphPlaceholder = document.getElementById('graph-placeholder');
         graphPlaceholder.textContent = 'グラフを生成中...';
 
@@ -1305,7 +1200,6 @@ async def generate_graph(results, theme_colors):
             text_secondary: '#A8B5D1', border: '#3A476F'
         };
 
-        // Pythonに渡すデータは、JSオブジェクトのままでOK
         const graphData = {
             initial_phase: { log: initialLog },
             loop_phase: { log: loop_phase.log }
@@ -1319,63 +1213,61 @@ async def generate_graph(results, theme_colors):
             graphPlaceholder.textContent = 'グラフの生成に失敗しました。';
         }
 
-        // 詳細ログタブ
         const detailsContainer = document.getElementById('tab-content-details');
-        // initialLog はすでにJS配列なので、そのまま .map を使える
         const logHtml = initialLog.map(log => `<p>${log.character}: ${log.skill} - ${log.damage.toFixed(0)}</p>`).join('');
         detailsContainer.innerHTML = logHtml;
     }
 
-    // --- Data Editor ロジック ---
-    // ▼▼▼ currentDataType の定義をここに移す (関数スコープ外) ▼▼▼
-    let currentDataType = 'characters';
+    // --- ユーティリティ ---
+    function setupStatusDisplay() {
+        const statusDiv = document.createElement('div');
+        statusDiv.id = 'pyodide-status';
+        statusDiv.style.position = 'fixed';
+        statusDiv.style.bottom = '10px';
+        statusDiv.style.left = '10px';
+        statusDiv.style.padding = '5px 10px';
+        statusDiv.style.backgroundColor = 'var(--color-surface)';
+        statusDiv.style.border = '1px solid var(--color-border)';
+        statusDiv.style.borderRadius = '6px';
+        statusDiv.style.fontSize = '12px';
+        statusDiv.style.zIndex = '1000';
+        statusDiv.style.opacity = '0';
+        statusDiv.style.transition = 'opacity 0.5s';
+        document.body.appendChild(statusDiv);
+    }
 
-    function renderDataEditorTabs() {
-        const tabContainer = document.getElementById('data-editor-tabs');
-        tabContainer.innerHTML = '';
-        const dataTypesJp = {
-            "characters": "キャラクター", "weapons": "武器", "harmony_effects": "ハーモニー",
-            "echo_skills": "音骸スキル", "builds": "ビルド", "scenarios": "シナリオ", "stage_effects": "ステージ効果"
-        };
-
-        dataManager.dataKeys.forEach(key => {
-            const button = document.createElement('button');
-            button.className = 'tab-button';
-            button.dataset.type = key;
-            button.textContent = dataTypesJp[key] || key;
-            if (key === currentDataType) {
-                button.classList.add('active');
+    function showStatus(message, fadeOut = false) {
+        const statusDiv = document.getElementById('pyodide-status');
+        if (statusDiv) {
+            statusDiv.textContent = message;
+            statusDiv.style.opacity = '1';
+            if (fadeOut) {
+                setTimeout(() => { statusDiv.style.opacity = '0'; }, 3000);
             }
-            tabContainer.appendChild(button);
+        }
+    }
+    
+    function initializeUI() {
+        const abnormalContainer = document.querySelector('.abnormal-effects');
+        if (!abnormalContainer) return;
+        abnormalContainer.innerHTML = abnormalContainer.firstElementChild.outerHTML;
+        GAME_DATA.ABNORMAL_EFFECTS.forEach(effect => {
+            const label = document.createElement('label');
+            label.innerHTML = `<input type="checkbox" checked> ${effect}`;
+            abnormalContainer.appendChild(label);
         });
     }
 
-    function renderDataList(dataType) {
-        const listContainer = document.getElementById('data-list-container');
-        listContainer.innerHTML = '';
-        const data = dataManager.getData(dataType, {});
-
-        for (const itemName in data) {
-            const row = document.createElement('div');
-            row.className = 'data-item-row';
-            row.innerHTML = `
-                <span class="data-item-name">${itemName}</span>
-                <div class="data-item-actions">
-                    <button data-action="edit" data-key="${dataType}" data-name="${itemName}" title="編集">✏️</button>
-                    <button data-action="delete" data-key="${dataType}" data-name="${itemName}" title="削除">🗑️</button>
-                </div>
-            `;
-            listContainer.appendChild(row);
-        }
-    }
-
-    // --- 初期化 & 実行 ---
+    // -----------------------------------------------------------------------------
+    // イベントリスナーのセットアップ
+    // -----------------------------------------------------------------------------
     setupStatusDisplay();
     createCharacterPanels();
     initializeUI();
     searchablePopup.setup();
     characterEditor.setup();
 
+    // サイドバーナビゲーション
     document.querySelectorAll('.nav-button').forEach(b => b.addEventListener('click', (e) => showFrame(e.target.id.replace('btn-', ''))));
     document.getElementById('btn-exit').addEventListener('click', () => {
         if (confirm('アプリケーションを終了しますか？')) {
@@ -1384,18 +1276,19 @@ async def generate_graph(results, theme_colors):
         }
     });
 
-    // ▼▼▼ 変更点: イベントリスナーを修正・追加 ▼▼▼
+    // データフォルダ選択
     document.getElementById('select-data-folder-btn').addEventListener('click', async () => {
-        await dataManager.initialize();
-        if (dataManager.isInitialized) {
+        const success = await dataManager.initialize();
+        if (success) {
             await updateUIWithOptions();
-            // DataManager初期化後にデータ管理画面のUIを更新
-            renderDataEditorTabs();
-            renderDataList(currentDataType);
+            if (document.getElementById('frame-data_editor').classList.contains('visible')) {
+                renderDataEditorTabs();
+                renderDataList(currentDataType);
+            }
         }
     });
 
-    // イベント委譲を使ってパネル内のボタンクリックを処理
+    // キャラクター準備画面のイベント
     document.querySelector('.team-container').addEventListener('click', (e) => {
         const panel = e.target.closest('.character-panel');
         if (!panel) return;
@@ -1405,26 +1298,89 @@ async def generate_graph(results, theme_colors):
         if (e.target.matches('[data-type="weapon"]')) onWeaponSelect(panelIndex);
         if (e.target.matches('.save-build-button')) saveBuildFromPanel(panelIndex);
     });
-
-    // ▼▼▼ 変更点: 新しいイベントリスナーを追加 ▼▼▼
+    
     document.querySelector('.team-container').addEventListener('change', (e) => {
-        if (e.target.matches('[data-type="build"]')) {
-            const panelIndex = e.target.closest('.character-panel').dataset.panelIndex;
-            loadBuildToPanel(panelIndex, e.target.value);
+        const panel = e.target.closest('.character-panel');
+        if (panel) {
+            const panelIndex = parseInt(panel.dataset.panelIndex, 10);
+            if (e.target.matches('[data-type="build"]')) {
+                loadBuildToPanel(panelIndex, e.target.value);
+            } else {
+                 createEchoInputWidget(panelIndex); // ビルド読込以外でも更新
+            }
+        }
+    });
+    
+    document.getElementById('proceed-button').addEventListener('click', () => {
+        appState.team_builds = [];
+        for (let i = 0; i < 3; i++) {
+            const build = getBuildFromPanel(i);
+            if (build) {
+                appState.team_builds.push(build);
+            }
+        }
+        if (appState.team_builds.length === 0) {
+            alert("キャラクターを1人以上設定してください。");
+            return;
+        }
+        setupRotationEditor();
+        showFrame('rotation_editor');
+    });
+
+    // ローテーション画面のイベント
+    document.getElementById('tab-btn-initial').addEventListener('click', () => {
+        appState.currentRotationView = 'initial';
+        document.getElementById('tab-btn-initial').classList.add('active');
+        document.getElementById('tab-btn-loop').classList.remove('active');
+        document.getElementById('initial-rotation-list').classList.add('visible');
+        document.getElementById('loop-rotation-list').classList.remove('visible');
+    });
+    document.getElementById('tab-btn-loop').addEventListener('click', () => {
+        appState.currentRotationView = 'loop';
+        document.getElementById('tab-btn-initial').classList.remove('active');
+        document.getElementById('tab-btn-loop').classList.add('active');
+        document.getElementById('initial-rotation-list').classList.remove('visible');
+        document.getElementById('loop-rotation-list').classList.add('visible');
+    });
+    document.getElementById('rotation-editor-panel').addEventListener('click', e => {
+        if (e.target.classList.contains('action-delete-btn')) {
+            const index = parseInt(e.target.dataset.index, 10);
+            const list = appState.currentRotationView === 'initial' ? appState.rotation_initial : appState.rotation_loop;
+            if (list) list.splice(index, 1);
+            recalculateAndRender();
+        }
+    });
+    document.getElementById('run-calculation-btn').addEventListener('click', runCalculationAndShowResults);
+
+    // 計算結果画面のイベント
+    document.getElementById('output-tabs').addEventListener('click', (e) => {
+        if (e.target.matches('.tab-button')) {
+            const tabName = e.target.dataset.tab;
+            document.querySelectorAll('#output-tabs .tab-button').forEach(btn => btn.classList.remove('active'));
+            e.target.classList.add('active');
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('visible'));
+            document.getElementById(`tab-content-${tabName}`).classList.add('visible');
         }
     });
 
-    // ▼▼▼ データリスト内のボタンクリックイベントリスナーを修正 ▼▼▼
+    // データ管理画面のイベント
+    document.getElementById('data-editor-tabs').addEventListener('click', e => {
+        if (e.target.matches('.tab-button')) {
+            currentDataType = e.target.dataset.type;
+            renderDataEditorTabs();
+            renderDataList(currentDataType);
+        }
+    });
+    
     document.getElementById('data-list-container').addEventListener('click', async e => {
         const button = e.target.closest('button');
         if (!button) return;
-
         const { action, key, name } = button.dataset;
 
         if (action === 'edit') {
             if (key === 'characters') {
                 const data = dataManager.getData(key, {});
-                const editedData = await characterEditor.open(name, data[name]); // characterEditor.open に key も渡す
+                const editedData = await characterEditor.open(name, data[name]);
                 if (editedData) {
                     data[name] = editedData;
                     if (await dataManager.saveData(key, data)) {
@@ -1435,13 +1391,12 @@ async def generate_graph(results, theme_colors):
                     }
                 }
             } else {
-                // 他のデータタイプはまだ未実装であることをユーザーに伝える
                 await customModals.alert("未実装", "このデータタイプのエディタは現在開発中です。");
             }
-        } else if (action === 'delete') { // 削除処理を追加
+        } else if (action === 'delete') {
             const confirmed = await customModals.confirm("削除確認", `'${name}' を本当に削除しますか？この操作は元に戻せません。`);
             if (confirmed) {
-                const data = dataManager.getData(key, {}); // 最新のデータを再取得
+                const data = dataManager.getData(key, {});
                 delete data[name];
                 if (await dataManager.saveData(key, data)) {
                     await customModals.alert("成功", `'${name}' を削除しました。`);
@@ -1452,8 +1407,7 @@ async def generate_graph(results, theme_colors):
             }
         }
     });
-
-    // ▼▼▼ 「新規追加」ボタンのイベントリスナーを修正 ▼▼▼
+    
     document.getElementById('add-new-item-btn').addEventListener('click', async () => {
         if (currentDataType !== 'characters') {
             await customModals.alert("未実装", "現在、キャラクターの新規追加のみサポートされています。");
@@ -1470,7 +1424,7 @@ async def generate_graph(results, theme_colors):
         }
 
         const newDataTemplate = { name: newItemName, rarity: "★5", yomigana: "", base_hp: 0, base_atk: 0, base_def: 0, resonance_energy_required: 125, weapon_type: "", attribute: "", innate_stats: [], skills: [], buffs: {}, constellations: {}, image_file: "" };
-        const newData = await characterEditor.open(null, newDataTemplate); // 新規作成時は名前を null に
+        const newData = await characterEditor.open(null, newDataTemplate);
 
         if (newData) {
             data[newItemName] = newData;
@@ -1482,457 +1436,9 @@ async def generate_graph(results, theme_colors):
             }
         }
     });
-
-    // ローテーションエディタのタブ切り替え
-    document.getElementById('tab-btn-initial').addEventListener('click', () => {
-        appState.currentRotationView = 'initial';
-        document.getElementById('tab-btn-initial').classList.add('active');
-        document.getElementById('tab-btn-loop').classList.remove('active');
-        document.getElementById('initial-rotation-list').classList.add('visible');
-        document.getElementById('loop-rotation-list').classList.remove('visible');
-    });
-    document.getElementById('tab-btn-loop').addEventListener('click', () => {
-        appState.currentRotationView = 'loop';
-        document.getElementById('tab-btn-initial').classList.remove('active');
-        document.getElementById('tab-btn-loop').classList.add('active');
-        document.getElementById('initial-rotation-list').classList.remove('visible');
-        document.getElementById('loop-rotation-list').classList.add('visible');
-    });
-
-    // アクション削除（イベント委任）
-    document.getElementById('rotation-editor-panel').addEventListener('click', e => {
-        if (e.target.classList.contains('action-delete-btn')) {
-            const index = parseInt(e.target.dataset.index, 10);
-            const list = appState.currentRotationView === 'initial' ? appState.rotation_initial : appState.rotation_loop;
-            if (list) list.splice(index, 1);
-            recalculateAndRender(); // 再計算をトリガー
-        }
-    });
-
-    // 「ローテーション入力へ進む」ボタンのイベントリスナー
-    document.getElementById('proceed-button').addEventListener('click', () => {
-        // 現在のパネルからビルド情報を収集してappStateに保存
-        appState.team_builds = [];
-        for (let i = 0; i < 3; i++) {
-            const build = getBuildFromPanel(i);
-            if (build) {
-                appState.team_builds.push(build);
-            }
-        }
-
-        if (appState.team_builds.length === 0) {
-            alert("キャラクターを1人以上設定してください。");
-            return;
-        }
-
-        // ローテーションエディタをセットアップして表示
-        setupRotationEditor();
-        showFrame('rotation_editor');
-    });
-
-    // 「計算実行」ボタン
-    document.getElementById('run-calculation-btn').addEventListener('click', runCalculationAndShowResults);
-
-    // 計算結果画面のタブ切り替え
-    document.getElementById('output-tabs').addEventListener('click', (e) => {
-        if (e.target.matches('.tab-button')) {
-            const tabName = e.target.dataset.tab;
-            document.querySelectorAll('#output-tabs .tab-button').forEach(btn => btn.classList.remove('active'));
-            e.target.classList.add('active');
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('visible'));
-            document.getElementById(`tab-content-${tabName}`).classList.add('visible');
-        }
-    });
-
-    // --- 初期化 & 実行 ---
-    setupStatusDisplay();
-    createCharacterPanels();
-    initializeUI();
-    searchablePopup.setup();
-    characterEditor.setup();
-
-    document.querySelectorAll('.nav-button').forEach(b => b.addEventListener('click', (e) => showFrame(e.target.id.replace('btn-', ''))));
-    document.getElementById('btn-exit').addEventListener('click', () => {
-        if (confirm('アプリケーションを終了しますか？')) {
-            alert('このタブを閉じてください。');
-            window.close();
-        }
-    });
-
-    // ▼▼▼ 変更点: イベントリスナーを修正・追加 ▼▼▼
-    document.getElementById('select-data-folder-btn').addEventListener('click', async () => {
-        await dataManager.initialize();
-        if (dataManager.isInitialized) {
-            await updateUIWithOptions();
-            // DataManager初期化後にデータ管理画面のUIを更新
-            renderDataEditorTabs();
-            renderDataList(currentDataType);
-        }
-    });
-
-    // イベント委譲を使ってパネル内のボタンクリックを処理
-    document.querySelector('.team-container').addEventListener('click', (e) => {
-        const panel = e.target.closest('.character-panel');
-        if (!panel) return;
-        const panelIndex = panel.dataset.panelIndex;
-
-        if (e.target.matches('[data-type="character"]')) onCharacterSelect(panelIndex);
-        if (e.target.matches('[data-type="weapon"]')) onWeaponSelect(panelIndex);
-        if (e.target.matches('.save-build-button')) saveBuildFromPanel(panelIndex);
-    });
-
-    // ▼▼▼ 変更点: 新しいイベントリスナーを追加 ▼▼▼
-    document.querySelector('.team-container').addEventListener('change', (e) => {
-        if (e.target.matches('[data-type="build"]')) {
-            const panelIndex = e.target.closest('.character-panel').dataset.panelIndex;
-            loadBuildToPanel(panelIndex, e.target.value);
-        }
-    });
-
-    // ▼▼▼ データリスト内のボタンクリックイベントリスナーを修正 ▼▼▼
-    document.getElementById('data-list-container').addEventListener('click', async e => {
-        const button = e.target.closest('button');
-        if (!button) return;
-
-        const { action, key, name } = button.dataset;
-
-        if (action === 'edit') {
-            if (key === 'characters') {
-                const data = dataManager.getData(key, {});
-                const editedData = await characterEditor.open(name, data[name]); // characterEditor.open に key も渡す
-                if (editedData) {
-                    data[name] = editedData;
-                    if (await dataManager.saveData(key, data)) {
-                        await customModals.alert("成功", `'${name}' を保存しました。`);
-                        renderDataList(key);
-                    } else {
-                        await customModals.alert("失敗", "データの保存に失敗しました。");
-                    }
-                }
-            } else {
-                // 他のデータタイプはまだ未実装であることをユーザーに伝える
-                await customModals.alert("未実装", "このデータタイプのエディタは現在開発中です。");
-            }
-        } else if (action === 'delete') { // 削除処理を追加
-            const confirmed = await customModals.confirm("削除確認", `'${name}' を本当に削除しますか？この操作は元に戻せません。`);
-            if (confirmed) {
-                const data = dataManager.getData(key, {}); // 最新のデータを再取得
-                delete data[name];
-                if (await dataManager.saveData(key, data)) {
-                    await customModals.alert("成功", `'${name}' を削除しました。`);
-                    renderDataList(key);
-                } else {
-                    await customModals.alert("失敗", "データの削除に失敗しました。");
-                }
-            }
-        }
-    });
-
-    // ▼▼▼ 「新規追加」ボタンのイベントリスナーを修正 ▼▼▼
-    document.getElementById('add-new-item-btn').addEventListener('click', async () => {
-        if (currentDataType !== 'characters') {
-            await customModals.alert("未実装", "現在、キャラクターの新規追加のみサポートされています。");
-            return;
-        }
-
-        const newItemName = await customModals.prompt("新規キャラクター", "新しいキャラクターの名前を入力してください:");
-        if (!newItemName || !newItemName.trim()) return;
-
-        const data = dataManager.getData(currentDataType, {});
-        if (data[newItemName]) {
-            await customModals.alert("エラー", `名前 '${newItemName}' は既に存在します。`);
-            return;
-        }
-
-        const newDataTemplate = { name: newItemName, rarity: "★5", yomigana: "", base_hp: 0, base_atk: 0, base_def: 0, resonance_energy_required: 125, weapon_type: "", attribute: "", innate_stats: [], skills: [], buffs: {}, constellations: {}, image_file: "" };
-        const newData = await characterEditor.open(null, newDataTemplate); // 新規作成時は名前を null に
-
-        if (newData) {
-            data[newItemName] = newData;
-            if (await dataManager.saveData(currentDataType, data)) {
-                await customModals.alert("成功", `'${newItemName}' を追加しました。`);
-                renderDataList(currentDataType);
-            }
-        }
-    });
-
-    // ローテーションエディタのタブ切り替え
-    document.getElementById('tab-btn-initial').addEventListener('click', () => {
-        appState.currentRotationView = 'initial';
-        document.getElementById('tab-btn-initial').classList.add('active');
-        document.getElementById('tab-btn-loop').classList.remove('active');
-        document.getElementById('initial-rotation-list').classList.add('visible');
-        document.getElementById('loop-rotation-list').classList.remove('visible');
-    });
-    document.getElementById('tab-btn-loop').addEventListener('click', () => {
-        appState.currentRotationView = 'loop';
-        document.getElementById('tab-btn-initial').classList.remove('active');
-        document.getElementById('tab-btn-loop').classList.add('active');
-        document.getElementById('initial-rotation-list').classList.remove('visible');
-        document.getElementById('loop-rotation-list').classList.add('visible');
-    });
-
-    // アクション削除（イベント委任）
-    document.getElementById('rotation-editor-panel').addEventListener('click', e => {
-        if (e.target.classList.contains('action-delete-btn')) {
-            const index = parseInt(e.target.dataset.index, 10);
-            const list = appState.currentRotationView === 'initial' ? appState.rotation_initial : appState.rotation_loop;
-            if (list) list.splice(index, 1);
-            recalculateAndRender(); // 再計算をトリガー
-        }
-    });
-
-    // 「ローテーション入力へ進む」ボタンのイベントリスナー
-    document.getElementById('proceed-button').addEventListener('click', () => {
-        // 現在のパネルからビルド情報を収集してappStateに保存
-        appState.team_builds = [];
-        for (let i = 0; i < 3; i++) {
-            const build = getBuildFromPanel(i);
-            if (build) {
-                appState.team_builds.push(build);
-            }
-        }
-
-        if (appState.team_builds.length === 0) {
-            alert("キャラクターを1人以上設定してください。");
-            return;
-        }
-
-        // ローテーションエディタをセットアップして表示
-        setupRotationEditor();
-        showFrame('rotation_editor');
-    });
-
-    // 「計算実行」ボタン
-    document.getElementById('run-calculation-btn').addEventListener('click', runCalculationAndShowResults);
-
-    // 計算結果画面のタブ切り替え
-    document.getElementById('output-tabs').addEventListener('click', (e) => {
-        if (e.target.matches('.tab-button')) {
-            const tabName = e.target.dataset.tab;
-            document.querySelectorAll('#output-tabs .tab-button').forEach(btn => btn.classList.remove('active'));
-            e.target.classList.add('active');
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('visible'));
-            document.getElementById(`tab-content-${tabName}`).classList.add('visible');
-        }
-    });
-
-    // --- 初期化 & 実行 ---
-    setupStatusDisplay();
-    createCharacterPanels();
-    initializeUI();
-    searchablePopup.setup();
-    characterEditor.setup();
-
-    document.querySelectorAll('.nav-button').forEach(b => b.addEventListener('click', (e) => showFrame(e.target.id.replace('btn-', ''))));
-    document.getElementById('btn-exit').addEventListener('click', () => {
-        if (confirm('アプリケーションを終了しますか？')) {
-            alert('このタブを閉じてください。');
-            window.close();
-        }
-    });
-
-    // ▼▼▼ 変更点: イベントリスナーを修正・追加 ▼▼▼
-    document.getElementById('select-data-folder-btn').addEventListener('click', async () => {
-        await dataManager.initialize();
-        if (dataManager.isInitialized) {
-            await updateUIWithOptions();
-            // DataManager初期化後にデータ管理画面のUIを更新
-            renderDataEditorTabs();
-            renderDataList(currentDataType);
-        }
-    });
-
-    // イベント委譲を使ってパネル内のボタンクリックを処理
-    document.querySelector('.team-container').addEventListener('click', (e) => {
-        const panel = e.target.closest('.character-panel');
-        if (!panel) return;
-        const panelIndex = panel.dataset.panelIndex;
-
-        if (e.target.matches('[data-type="character"]')) onCharacterSelect(panelIndex);
-        if (e.target.matches('[data-type="weapon"]')) onWeaponSelect(panelIndex);
-        if (e.target.matches('.save-build-button')) saveBuildFromPanel(panelIndex);
-    });
-
-    // ▼▼▼ 変更点: 新しいイベントリスナーを追加 ▼▼▼
-    document.querySelector('.team-container').addEventListener('change', (e) => {
-        if (e.target.matches('[data-type="build"]')) {
-            const panelIndex = e.target.closest('.character-panel').dataset.panelIndex;
-            loadBuildToPanel(panelIndex, e.target.value);
-        }
-    });
-
-    // ▼▼▼ データリスト内のボタンクリックイベントリスナーを修正 ▼▼▼
-    document.getElementById('data-list-container').addEventListener('click', async e => {
-        const button = e.target.closest('button');
-        if (!button) return;
-
-        const { action, key, name } = button.dataset;
-
-        if (action === 'edit') {
-            if (key === 'characters') {
-                const data = dataManager.getData(key, {});
-                const editedData = await characterEditor.open(name, data[name]); // characterEditor.open に key も渡す
-                if (editedData) {
-                    data[name] = editedData;
-                    if (await dataManager.saveData(key, data)) {
-                        await customModals.alert("成功", `'${name}' を保存しました。`);
-                        renderDataList(key);
-                    } else {
-                        await customModals.alert("失敗", "データの保存に失敗しました。");
-                    }
-                }
-            } else {
-                // 他のデータタイプはまだ未実装であることをユーザーに伝える
-                await customModals.alert("未実装", "このデータタイプのエディタは現在開発中です。");
-            }
-        } else if (action === 'delete') { // 削除処理を追加
-            const confirmed = await customModals.confirm("削除確認", `'${name}' を本当に削除しますか？この操作は元に戻せません。`);
-            if (confirmed) {
-                const data = dataManager.getData(key, {}); // 最新のデータを再取得
-                delete data[name];
-                if (await dataManager.saveData(key, data)) {
-                    await customModals.alert("成功", `'${name}' を削除しました。`);
-                    renderDataList(key);
-                } else {
-                    await customModals.alert("失敗", "データの削除に失敗しました。");
-                }
-            }
-        }
-    });
-
-    // ▼▼▼ 「新規追加」ボタンのイベントリスナーを修正 ▼▼▼
-    document.getElementById('add-new-item-btn').addEventListener('click', async () => {
-        if (currentDataType !== 'characters') {
-            await customModals.alert("未実装", "現在、キャラクターの新規追加のみサポートされています。");
-            return;
-        }
-
-        const newItemName = await customModals.prompt("新規キャラクター", "新しいキャラクターの名前を入力してください:");
-        if (!newItemName || !newItemName.trim()) return;
-
-        const data = dataManager.getData(currentDataType, {});
-        if (data[newItemName]) {
-            await customModals.alert("エラー", `名前 '${newItemName}' は既に存在します。`);
-            return;
-        }
-
-        const newDataTemplate = { name: newItemName, rarity: "★5", yomigana: "", base_hp: 0, base_atk: 0, base_def: 0, resonance_energy_required: 125, weapon_type: "", attribute: "", innate_stats: [], skills: [], buffs: {}, constellations: {}, image_file: "" };
-        const newData = await characterEditor.open(null, newDataTemplate); // 新規作成時は名前を null に
-
-        if (newData) {
-            data[newItemName] = newData;
-            if (await dataManager.saveData(currentDataType, data)) {
-                await customModals.alert("成功", `'${newItemName}' を追加しました。`);
-                renderDataList(currentDataType);
-            }
-        }
-    });
-
-    // ローテーションエディタのタブ切り替え
-    document.getElementById('tab-btn-initial').addEventListener('click', () => {
-        appState.currentRotationView = 'initial';
-        document.getElementById('tab-btn-initial').classList.add('active');
-        document.getElementById('tab-btn-loop').classList.remove('active');
-        document.getElementById('initial-rotation-list').classList.add('visible');
-        document.getElementById('loop-rotation-list').classList.remove('visible');
-    });
-    document.getElementById('tab-btn-loop').addEventListener('click', () => {
-        appState.currentRotationView = 'loop';
-        document.getElementById('tab-btn-initial').classList.remove('active');
-        document.getElementById('tab-btn-loop').classList.add('active');
-        document.getElementById('initial-rotation-list').classList.remove('visible');
-        document.getElementById('loop-rotation-list').classList.add('visible');
-    });
-
-    // アクション削除（イベント委任）
-    document.getElementById('rotation-editor-panel').addEventListener('click', e => {
-        if (e.target.classList.contains('action-delete-btn')) {
-            const index = parseInt(e.target.dataset.index, 10);
-            const list = appState.currentRotationView === 'initial' ? appState.rotation_initial : appState.rotation_loop;
-            if (list) list.splice(index, 1);
-            recalculateAndRender(); // 再計算をトリガー
-        }
-    });
-
-    // 「ローテーション入力へ進む」ボタンのイベントリスナー
-    document.getElementById('proceed-button').addEventListener('click', () => {
-        // 現在のパネルからビルド情報を収集してappStateに保存
-        appState.team_builds = [];
-        for (let i = 0; i < 3; i++) {
-            const build = getBuildFromPanel(i);
-            if (build) {
-                appState.team_builds.push(build);
-            }
-        }
-
-        if (appState.team_builds.length === 0) {
-            alert("キャラクターを1人以上設定してください。");
-            return;
-        }
-
-        // ローテーションエディタをセットアップして表示
-        setupRotationEditor();
-        showFrame('rotation_editor');
-    });
-
-    // 「計算実行」ボタン
-    document.getElementById('run-calculation-btn').addEventListener('click', runCalculationAndShowResults);
-
-    // 計算結果画面のタブ切り替え
-    document.getElementById('output-tabs').addEventListener('click', (e) => {
-        if (e.target.matches('.tab-button')) {
-            const tabName = e.target.dataset.tab;
-            document.querySelectorAll('#output-tabs .tab-button').forEach(btn => btn.classList.remove('active'));
-            e.target.classList.add('active');
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('visible'));
-            document.getElementById(`tab-content-${tabName}`).classList.add('visible');
-        }
-    });
-
-    // --- 初期化 & 実行 ---
-    setupStatusDisplay();
-    createCharacterPanels();
-    initializeUI();
-    searchablePopup.setup();
-    characterEditor.setup();
-
-    document.querySelectorAll('.nav-button').forEach(b => b.addEventListener('click', (e) => showFrame(e.target.id.replace('btn-', ''))));
-    document.getElementById('btn-exit').addEventListener('click', () => {
-        if (confirm('アプリケーションを終了しますか？')) {
-            alert('このタブを閉じてください。');
-            window.close();
-        }
-    });
-
-    // ▼▼▼ 変更点: イベントリスナーを修正・追加 ▼▼▼
-    document.getElementById('select-data-folder-btn').addEventListener('click', async () => {
-        await dataManager.initialize();
-        if (dataManager.isInitialized) {
-            await updateUIWithOptions();
-            // DataManager初期化後にデータ管理画面のUIを更新
-            renderDataEditorTabs();
-            renderDataList(currentDataType);
-        }
-    });
-
-    // イベント委譲を使ってパネル内のボタンクリックを処理
-    document.querySelector('.team-container').addEventListener('click', (e) => {
-        const panel = e.target.closest('.character-panel');
-        if (!panel) return;
-        const panelIndex = panel.dataset.panelIndex;
-
-        if (e.target.matches('[data-type="character"]')) onCharacterSelect(panelIndex);
-        if (e.target.matches('[data-type="weapon"]')) onWeaponSelect(panelIndex);
-        if (e.target.matches('.save-build-button')) saveBuildFromPanel(panelIndex);
-    });
-
-    // ▼▼▼ 変更点: 新しいイベントリスナーを追加 ▼▼▼
-    document.querySelector('.team-container').addEventListener('change', (e) => {
-        if (e.target.matches('[data-type="build"]')) {
-            const panelIndex = e.target.closest('.character-panel').dataset.panelIndex;
-            loadBuildToPanel(panelIndex, e.target.value);
-        }
-    });
+    
+    // --- アプリケーション起動 ---
+    showFrame('char_setup');
+    await initializePyodide();
 
 });
