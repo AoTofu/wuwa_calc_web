@@ -123,13 +123,32 @@
                     </div>
                 </div>
             </div>
+
+            <!-- ▼▼▼ 変更箇所 ▼▼▼ -->
             <div id="frame-data_editor" class="content-frame">
-                <h1 class="page-title">データ管理</h1>
+                <div class="top-bar">
+                    <h1 class="page-title">データ管理</h1>
+                </div>
+                <!-- ▼▼▼ ここからが新しい、正しい構造 ▼▼▼ -->
+                <div class="tab-buttons" id="data-editor-tabs">
+                    <!-- データ管理用のタブボタンがJSでここに生成されます -->
+                </div>
+                <div class="data-editor-content">
+                    <div class="data-editor-toolbar">
+                        <button id="add-new-item-btn" class="action-button">+ 新規追加</button>
+                    </div>
+                    <div id="data-list-container" class="scrollable-list data-list">
+                        <!-- 選択されたデータのアイテムリストがJSでここに表示されます -->
+                    </div>
+                </div>
+                <!-- ▲▲▲ ここまで ▲▲▲ -->
             </div>
+            <!-- ▲▲▲ 変更箇所ここまで ▲▲▲ -->
+
         </main>
     </div>
 
-    <!-- ▼▼▼ ここに検索可能ポップアップ（モーダル）のHTMLを統合 ▼▼▼ -->
+    <!-- ▼▼▼ 1. 検索可能ポップアップ用モーダル (新規追加) ▼▼▼ -->
     <div id="searchable-popup-overlay" class="modal-overlay">
         <div class="modal-content">
             <h2 id="popup-title">タイトル</h2>
@@ -140,23 +159,40 @@
             <button id="popup-close-btn" class="popup-close-button">閉じる</button>
         </div>
     </div>
-    <!-- ▲▲▲ ここまで ▲▲▲ -->
 
-    <!-- ▼▼▼ ビルド保存用モーダルを追加 ▼▼▼ -->
-    <div id="save-build-overlay" class="modal-overlay">
-        <div class="modal-content">
-            <h2 id="save-build-title">ビルドを保存</h2>
-            <p id="save-build-prompt">この装備構成のビルド名を入力してください:</p>
-            <input type="text" id="save-build-input" placeholder="ビルド名...">
+    <!-- ▼▼▼ 2. キャラクターエディタ用モーダル ▼▼▼ -->
+    <div id="character-editor-overlay" class="modal-overlay">
+        <div class="modal-content wide">
+            <h2 id="character-editor-title">キャラクターを編集</h2>
+            <div class="editor-layout">
+                <!-- 左パネル: 画像と基本情報 -->
+                <div class="editor-left-panel">
+                    <div id="char-editor-image" class="char-editor-image-preview"></div>
+                    <button id="char-editor-img-btn" class="action-button">画像を選択</button>
+                    <div id="char-editor-main-fields" class="editor-main-fields">
+                        <!-- 基本情報の入力欄がJSでここに生成されます -->
+                    </div>
+                </div>
+                <!-- 右パネル: タブ付きの詳細情報 -->
+                <div class="editor-right-panel">
+                    <div class="tab-buttons" id="char-editor-tabs">
+                        <button class="tab-button active" data-tab="skills">スキル</button>
+                        <button class="tab-button" data-tab="buffs">固有バフ</button>
+                        <button class="tab-button" data-tab="constellations">凸効果</button>
+                    </div>
+                    <div id="char-editor-tab-content" class="editor-tab-content">
+                        <!-- 各タブの中身がJSでここに生成されます -->
+                    </div>
+                </div>
+            </div>
             <div class="modal-buttons">
-                <button id="save-build-confirm-btn" class="modal-button-primary">保存</button>
-                <button id="save-build-cancel-btn" class="modal-button-secondary">キャンセル</button>
+                <button id="char-editor-save-btn" class="modal-button-primary">保存</button>
+                <button id="char-editor-cancel-btn" class="modal-button-secondary">キャンセル</button>
             </div>
         </div>
     </div>
-    <!-- ▲▲▲ ここまで ▲▲▲ -->
 
-    <!-- ▼▼▼ 確認ダイアログ用モーダルを追加 ▼▼▼ -->
+    <!-- ▼▼▼ 3. 確認/通知用モーダル ▼▼▼ -->
     <div id="confirm-overlay" class="modal-overlay">
         <div class="modal-content">
             <h2 id="confirm-title">確認</h2>
@@ -168,7 +204,6 @@
         </div>
     </div>
 
-    <!-- ▼▼▼ 通知ダイアログ用モーダルを追加 ▼▼▼ -->
     <div id="alert-overlay" class="modal-overlay">
         <div class="modal-content">
             <h2 id="alert-title">情報</h2>

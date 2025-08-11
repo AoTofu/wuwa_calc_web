@@ -165,6 +165,7 @@ const searchablePopup = {
         overlay.addEventListener('click', (e) => {
             if (e.target === overlay) this.close(null);
         });
+        
         closeBtn.addEventListener('click', () => this.close(null));
         searchInput.addEventListener('input', (e) => this._filter(e.target.value));
     },
@@ -282,6 +283,78 @@ const customModals = {
 
             okBtn.onclick = () => cleanup();
         });
+    }
+};
+
+// -----------------------------------------------------------------------------
+// Character Editor モジュール
+// -----------------------------------------------------------------------------
+const characterEditor = {
+    _resolve: null,
+    _characterData: null,
+    
+    setup() {
+        // (ボタンイベントなどを設定)
+    },
+
+    open(charName, charData) {
+        return new Promise(resolve => {
+            this._resolve = resolve;
+            this._characterData = JSON.parse(JSON.stringify(charData)); // 安全なコピーを作成
+
+            document.getElementById('character-editor-title').textContent = charName ? `'${charName}' を編集中` : '新規キャラクター作成';
+            
+            this.render(); // UIを描画
+
+            document.getElementById('character-editor-overlay').classList.add('visible');
+        });
+    },
+
+    render() {
+        // 基本情報フィールドを描画
+        const fieldsContainer = document.getElementById('char-editor-main-fields');
+        fieldsContainer.innerHTML = `
+            <div class="form-row"><label>名前</label><input id="char-editor-name" type="text" value="${this._characterData.name || ''}" readonly></div>
+            <div class="form-row"><label>読み仮名</label><input id="char-editor-yomigana" type="text" value="${this._characterData.yomigana || ''}"></div>
+            <div class="form-row"><label>レアリティ</label><select id="char-editor-rarity">${["★5", "★4", "★3"].map(o=>`<option ${o===this._characterData.rarity ?'selected':''}>${o}</option>`).join('')}</select></div>
+            <div class="form-row"><label>属性</label><select id="char-editor-attribute">${["気動","焦熱","凝縮","電導","消滅","回折"].map(o=>`<option ${o===this._characterData.attribute ?'selected':''}>${o}</option>`).join('')}</select></div>
+            <div class="form-row"><label>武器種</label><select id="char-editor-weapon_type">${["迅刀","長刃","増幅器","手甲","拳銃"].map(o=>`<option ${o===this._characterData.weapon_type ?'selected':''}>${o}</option>`).join('')}</select></div>
+            <div class="form-row"><label>基礎HP</label><input id="char-editor-base_hp" type="number" value="${this._characterData.base_hp || 0}"></div>
+            <div class="form-row"><label>基礎攻撃力</label><input id="char-editor-base_atk" type="number" value="${this._characterData.base_atk || 0}"></div>
+            <div class="form-row"><label>基礎防御力</label><input id="char-editor-base_def" type="number" value="${this._characterData.base_def || 0}"></div>
+        `;
+
+        // スキルタブをデフォルトで表示
+        this.renderSkillsTab(); 
+    },
+
+    renderSkillsTab() {
+        const content = document.getElementById('char-editor-tab-content');
+        const skills = this._characterData.skills || [];
+        content.innerHTML = `
+            <div class="data-editor-toolbar"><button class="action-button">+ 新規スキル</button></div>
+            ${skills.map(skill => `<div class="data-item-row"><span class="data-item-name">${skill.name}</span></div>`).join('')}
+        `;
+    },
+    
+    // (renderBuffsTab, renderConstellationsTab などの描画関数もここに追加)
+
+    _onSave() {
+        // フォームからデータを収集して _characterData を更新
+        this._characterData.yomigana = document.getElementById('char-editor-yomigana').value;
+        // ... 他のフィールドも同様に収集 ...
+        
+        this._close(this._characterData);
+    },
+    
+    _onCancel() { this._close(null); },
+
+    _close(data) {
+        document.getElementById('character-editor-overlay').classList.remove('visible');
+        if (this._resolve) {
+            this._resolve(data);
+            this._resolve = null;
+        }
     }
 };
 
@@ -1254,6 +1327,7 @@ async def generate_graph(results, theme_colors):
     createCharacterPanels();
     initializeUI();
     searchablePopup.setup(); // ポップアップのセットアップ
+    characterEditor.setup(); // ★★★ 変更箇所 ★★★
 
     document.querySelectorAll('.nav-button').forEach(b => b.addEventListener('click', (e) => showFrame(e.target.id.replace('btn-', ''))));
     document.getElementById('btn-exit').addEventListener('click', () => {
@@ -1290,6 +1364,61 @@ async def generate_graph(results, theme_colors):
         }
     });
 
+    // ★★★ 変更箇所 ★★★
+    // ▼▼▼ データリスト内のボタンクリックイベントリスナーを修正 ▼▼▼
+    document.getElementById('data-list-container').addEventListener('click', async e => {
+        const button = e.target.closest('button');
+        if (!button) return;
+
+        const { action, key, name } = button.dataset;
+        
+        if (action === 'edit') {
+            if (key === 'characters') {
+                const data = dataManager.getData(key, {});
+                const editedData = await characterEditor.open(name, data[name]);
+                if (editedData) {
+                    data[name] = editedData;
+                    if (await dataManager.saveData(key, data)) {
+                        await customModals.alert("成功", `'${name}' を保存しました。`);
+                        renderDataList(key);
+                    }
+                }
+            } else {
+                // 他のデータタイプはまだ未実装であることをユーザーに伝える
+                await customModals.alert("未実装", "このデータタイプのエディタは現在開発中です。");
+            }
+        } 
+        // ... (削除処理は変更なし) ...
+    });
+    
+    // ★★★ 変更箇所 ★★★
+    // ▼▼▼ 「新規追加」ボタンのイベントリスナーを修正 ▼▼▼
+    document.getElementById('add-new-item-btn').addEventListener('click', async () => {
+        if (currentDataType !== 'characters') {
+            await customModals.alert("未実装", "現在、キャラクターの新規追加のみサポートされています。");
+            return;
+        }
+
+        const newItemName = prompt("新しいキャラクターの名前を入力してください:");
+        if (!newItemName || !newItemName.trim()) return;
+        
+        const data = dataManager.getData(currentDataType, {});
+        if (data[newItemName]) {
+            await customModals.alert("エラー", `名前 '${newItemName}' は既に存在します。`);
+            return;
+        }
+
+        const newDataTemplate = { name: newItemName, rarity: "★5" /* ...その他のデフォルト値 */ };
+        const newData = await characterEditor.open(null, newDataTemplate);
+        
+        if (newData) {
+            data[newItemName] = newData;
+            if (await dataManager.saveData(currentDataType, data)) {
+                await customModals.alert("成功", `'${newItemName}' を追加しました。`);
+                renderDataList(currentDataType);
+            }
+        }
+    });
 
     // ローテーションエディタのタブ切り替え
     document.getElementById('tab-btn-initial').addEventListener('click', () => {
