@@ -315,20 +315,51 @@ const customModals = {
 const characterEditor = {
     _resolve: null,
     _characterData: null,
-    
+    _activeTab: 'skills',
+
     setup() {
-        // (ボタンイベントなどを設定)
+        // --- メインモーダルのボタンイベント ---
+        document.getElementById('char-editor-save-btn').addEventListener('click', () => this._onSave());
+        document.getElementById('char-editor-cancel-btn').addEventListener('click', () => this._onCancel());
+        document.getElementById('character-editor-overlay').addEventListener('click', (e) => {
+            if (e.target.id === 'character-editor-overlay') this._onCancel();
+        });
+
+        // --- タブ切り替えイベント ---
+        document.getElementById('char-editor-tabs').addEventListener('click', (e) => {
+            if (e.target.matches('.tab-button')) {
+                this._activeTab = e.target.dataset.tab;
+                document.querySelectorAll('#char-editor-tabs .tab-button').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                this.renderActiveTab();
+            }
+        });
+
+        // --- タブコンテンツ内の動的イベント（イベント委任）---
+        document.getElementById('char-editor-tab-content').addEventListener('click', e => {
+            const button = e.target.closest('button');
+            if (!button) return;
+
+            const action = button.dataset.action;
+            const index = parseInt(button.dataset.index, 10);
+
+            if (this._activeTab === 'skills') {
+                if (action === 'edit-skill') this._openSkillEditor(index);
+                if (action === 'delete-skill') this._deleteSkill(index);
+                if (action === 'new-skill') this._openSkillEditor(-1);
+            }
+        });
     },
 
     open(charName, charData) {
         return new Promise(resolve => {
             this._resolve = resolve;
-            this._characterData = JSON.parse(JSON.stringify(charData)); // 安全なコピーを作成
+            this._characterData = JSON.parse(JSON.stringify(charData)); // 安全なディープコピー
+            this._activeTab = 'skills'; // 常にスキルタブから開始
 
             document.getElementById('character-editor-title').textContent = charName ? `'${charName}' を編集中` : '新規キャラクター作成';
             
-            this.render(); // UIを描画
-
+            this.render(); // UI全体を描画
             document.getElementById('character-editor-overlay').classList.add('visible');
         });
     },
@@ -347,25 +378,103 @@ const characterEditor = {
             <div class="form-row"><label>基礎防御力</label><input id="char-editor-base_def" type="number" value="${this._characterData.base_def || 0}"></div>
         `;
 
-        // スキルタブをデフォルトで表示
-        this.renderSkillsTab(); 
+        // アクティブなタブを描画
+        document.querySelectorAll('#char-editor-tabs .tab-button').forEach(b => {
+            b.classList.toggle('active', b.dataset.tab === this._activeTab);
+        });
+        this.renderActiveTab();
+    },
+
+    renderActiveTab() {
+        switch (this._activeTab) {
+            case 'skills': this.renderSkillsTab(); break;
+            case 'buffs': this.renderBuffsTab(); break;
+            case 'constellations': this.renderConstellationsTab(); break;
+        }
     },
 
     renderSkillsTab() {
         const content = document.getElementById('char-editor-tab-content');
         const skills = this._characterData.skills || [];
+        
+        let skillRowsHtml = skills.map((skill, index) => `
+            <div class="data-item-row">
+                <span class="data-item-name">${skill.name || '無題のスキル'}</span>
+                <div class="data-item-actions">
+                    <button data-action="edit-skill" data-index="${index}" title="編集">✏️</button>
+                    <button data-action="delete-skill" data-index="${index}" title="削除">🗑️</button>
+                </div>
+            </div>
+        `).join('');
+
         content.innerHTML = `
-            <div class="data-editor-toolbar"><button class="action-button">+ 新規スキル</button></div>
-            ${skills.map(skill => `<div class="data-item-row"><span class="data-item-name">${skill.name}</span></div>`).join('')}
+            <div class="data-editor-toolbar"><button class="action-button" data-action="new-skill">+ 新規スキル</button></div>
+            <div class="scrollable-list">${skillRowsHtml}</div>
         `;
     },
+
+    async _openSkillEditor(index) {
+        const isNew = index === -1;
+        const skills = this._characterData.skills || [];
+        const skillData = isNew 
+            ? { name: '', multiplier: 100.0, attribute: 'atk', activation_types: [], damage_types: [], concerto_energy: 0 }
+            : skills[index];
+
+        // ここでスキル編集用のモーダルを表示する
+        // 今回は簡略化のため、いくつかの主要な項目だけを編集できるようにする
+        const newName = prompt("スキル名を入力:", skillData.name);
+        if (newName === null) return; // キャンセルされた
+        
+        const newMultiplier = prompt("スキル倍率(%)を入力:", skillData.multiplier);
+        if (newMultiplier === null) return;
+
+        try {
+            const updatedSkill = { ...skillData, name: newName, multiplier: parseFloat(newMultiplier) };
+            
+            if (isNew) {
+                skills.push(updatedSkill);
+            } else {
+                skills[index] = updatedSkill;
+            }
+            this._characterData.skills = skills;
+            this.renderSkillsTab(); // UIを再描画
+        } catch(e) {
+            await customModals.alert("入力エラー", "倍率は数値で入力してください。");
+        }
+    },
+
+    async _deleteSkill(index) {
+        const skills = this._characterData.skills || [];
+        if (index < 0 || index >= skills.length) return;
+
+        const confirmed = await customModals.confirm("削除確認", `スキル '${skills[index].name}' を本当に削除しますか？`);
+        if (confirmed) {
+            skills.splice(index, 1);
+            this._characterData.skills = skills;
+            this.renderSkillsTab();
+        }
+    },
+
+    renderBuffsTab() {
+        const content = document.getElementById('char-editor-tab-content');
+        content.innerHTML = `<p class="placeholder-text">固有バフの編集は現在開発中です。</p>`;
+    },
     
-    // (renderBuffsTab, renderConstellationsTab などの描画関数もここに追加)
+    renderConstellationsTab() {
+        const content = document.getElementById('char-editor-tab-content');
+        content.innerHTML = `<p class="placeholder-text">凸効果の編集は現在開発中です。</p>`;
+    },
 
     _onSave() {
         // フォームからデータを収集して _characterData を更新
+        this._characterData.name = document.getElementById('char-editor-name').value;
         this._characterData.yomigana = document.getElementById('char-editor-yomigana').value;
-        // ... 他のフィールドも同様に収集 ...
+        this._characterData.rarity = document.getElementById('char-editor-rarity').value;
+        this._characterData.attribute = document.getElementById('char-editor-attribute').value;
+        this._characterData.weapon_type = document.getElementById('char-editor-weapon_type').value;
+        this._characterData.base_hp = parseFloat(document.getElementById('char-editor-base_hp').value);
+        this._characterData.base_atk = parseFloat(document.getElementById('char-editor-base_atk').value);
+        this._characterData.base_def = parseFloat(document.getElementById('char-editor-base_def').value);
         
         this._close(this._characterData);
     },

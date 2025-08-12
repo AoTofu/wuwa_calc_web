@@ -925,56 +925,52 @@ input:checked+.slider:before {
     box-shadow: 0 0 10px -2px var(--color-primary);
 }
 
-/* --- Character Editor Modal --- */
+/* style.css の Character Editor Modal 以降をこれで置き換え */
+
+/* --- Character Editor & Skill Editor Modal --- */
 .modal-content.wide {
-    max-width: 900px; /* 幅を広く */
+    max-width: 950px; /* 少し幅を広げる */
     width: 90%;
-    height: 85%;
+    height: 90%;
 }
 .editor-layout {
-    display: flex;
+    display: grid; /* FlexboxからGridに変更 */
+    grid-template-columns: 300px 1fr; /* 左パネル固定幅、右パネル可変 */
     flex-grow: 1;
     gap: 20px;
-    overflow-y: hidden; /* スクロールは各パネルに任せる */
+    overflow-y: hidden;
 }
 .editor-left-panel, .editor-right-panel {
     display: flex;
     flex-direction: column;
     gap: 15px;
-}
-.editor-left-panel {
-    width: 300px;
-    flex-shrink: 0;
-}
-.editor-right-panel {
-    flex-grow: 1;
+    overflow-y: auto; /* 各パネルでスクロール可能に */
 }
 .char-editor-image-preview {
-    width: 128px;
-    height: 128px;
+    width: 150px;
+    height: 150px;
     background-color: var(--color-background);
     border: 2px dashed var(--color-border);
     border-radius: 50%;
-    margin: 0 auto;
+    margin: 10px auto;
     background-size: cover;
     background-position: center;
 }
-#char-editor-img-btn {
-    width: 100%;
-}
 .editor-main-fields {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-}
-.form-row {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 12px;
+}
+.form-row {
+    display: grid;
+    grid-template-columns: 100px 1fr; /* ラベルと入力欄 */
+    gap: 10px;
+    align-items: center;
 }
 .form-row label {
-    font-size: 12px;
+    font-size: 13px;
     color: var(--color-text-secondary);
+    text-align: right;
 }
 .form-row input, .form-row select {
     width: 100%;
@@ -988,8 +984,41 @@ input:checked+.slider:before {
 }
 .editor-tab-content {
     flex-grow: 1;
+    background-color: rgba(0,0,0,0.15);
+    border-radius: 8px;
+    padding: 5px;
+}
+
+/* スキルエディタ用のグリッドレイアウト */
+#skill-editor-fields {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2列グリッド */
+    gap: 15px 20px;
     overflow-y: auto;
     padding: 10px;
-    background-color: rgba(0,0,0,0.1);
+}
+#skill-editor-fields .form-row {
+    grid-template-columns: 120px 1fr; /* ラベル幅を調整 */
+}
+.checkbox-group {
+    grid-column: 1 / -1; /* 2列をまたぐ */
+    background-color: rgba(0,0,0,0.2);
+    padding: 10px;
     border-radius: 8px;
+}
+.checkbox-group h3 {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    font-weight: 500;
+}
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 8px;
+}
+.checkbox-grid label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
 }
